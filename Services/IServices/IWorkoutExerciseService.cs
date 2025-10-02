@@ -7,7 +7,7 @@ namespace PapisPowerPracticeApi.Services.IServices
     public interface IWorkoutExerciseService
     {
         Task<WorkoutExerciseDTO> GetWorkoutExerciseByIdAsync(int id);
-        Task<int> AddWorkoutExerciseAsync(CreateWorkoutExerciseDTO createWorkout);
+        Task<int> CreateWorkoutExerciseAsync(CreateWorkoutExerciseDTO createWorkout);
         Task<bool> UpdateWorkoutExerciseAsync(int id,PatchWorkoutExerciseDTO patchWorkout);
         Task<bool> DeleteWorkoutExerciseAsync(int id);
     }

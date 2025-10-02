@@ -34,7 +34,7 @@ namespace PapisPowerPracticeApi.Services
             };
             return workoutDTO;
         }
-        public async Task<int> AddWorkoutExerciseAsync(CreateWorkoutExerciseDTO createWorkout)
+        public async Task<int> CreateWorkoutExerciseAsync(CreateWorkoutExerciseDTO createWorkout)
         {
             var workout = new WorkoutExercise
             {
