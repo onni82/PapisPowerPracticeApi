@@ -1,6 +1,6 @@
 ﻿namespace PapisPowerPracticeApi.Models
 {
-    public class WorkoutExcercise
+    public class WorkoutExercise
     {
         public int Id { get; set; }
         
