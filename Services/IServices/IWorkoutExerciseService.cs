@@ -8,7 +8,7 @@ namespace PapisPowerPracticeApi.Services.IServices
     {
         Task<WorkoutExerciseDTO> GetWorkoutExerciseByIdAsync(int id);
         Task<int> AddWorkoutExerciseAsync(CreateWorkoutExerciseDTO createWorkout);
-        Task<bool> UpdateWorkoutExerciseAsync(PatchWorkoutExerciseDTO patchWorkout);
+        Task<bool> UpdateWorkoutExerciseAsync(int id,PatchWorkoutExerciseDTO patchWorkout);
         Task<bool> DeleteWorkoutExerciseAsync(int id);
     }
 }
