@@ -33,19 +33,19 @@ namespace PapisPowerPracticeApi.Repositories
         }
         public async Task<List<MuscleGroup>> GetAllMuscleGroupsAsync()
         {
-            var menus = await _dbContext.MuscleGroups.ToListAsync();
+            var muscleGroups = await _dbContext.MuscleGroups.ToListAsync();
 
-            return menus;
+            return muscleGroups;
         }
-        public async Task<MuscleGroup> GetMuscleGroupByIdAsync(int menuId)
+        public async Task<MuscleGroup> GetMuscleGroupByIdAsync(int muscleGroupId)
         {
-            var menu = await _dbContext.MuscleGroups
-                .FirstOrDefaultAsync(s => s.Id == menuId);
+            var muscleGroup = await _dbContext.MuscleGroups
+                .FirstOrDefaultAsync(s => s.Id == muscleGroupId);
 
-            return menu;
+            return muscleGroup;
 
         }
-        public async Task<bool> UpdateMenuAsync(MuscleGroup muscleGroup)
+        public async Task<bool> UpdateMuscleGroupAsync(MuscleGroup muscleGroup)
         {
             _dbContext.MuscleGroups.Update(muscleGroup);
             var result = await _dbContext.SaveChangesAsync();
