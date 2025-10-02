@@ -14,5 +14,16 @@ namespace PapisPowerPracticeApi.Data
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<WorkoutExercise> WorkoutExercises { get; set; }
         public DbSet<MuscleGroup> MuscleGroups { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            // Flera-till-flera-relation Exercise med MuscleGroup
+            builder.Entity<Exercise>()
+                .HasMany(e => e.MuscleGroups)
+                .WithMany(m => m.Exercises)
+                .UsingEntity(j => j.ToTable("ExerciseMuscleGroups"));
+        }
     }
 }
