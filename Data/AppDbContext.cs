@@ -12,8 +12,7 @@ namespace PapisPowerPracticeApi.Data
 
         public DbSet<WorkoutLog> WorkoutLogs { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
-        public DbSet<WorkoutExcercise> WorkoutExcercises { get; set; }
+        public DbSet<WorkoutExercise> WorkoutExercises { get; set; }
         public DbSet<MuscleGroup> MuscleGroups { get; set; }
-
     }
 }
