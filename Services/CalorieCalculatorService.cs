@@ -1,8 +1,9 @@
 ﻿using PapisPowerPracticeApi.Models;
+using PapisPowerPracticeApi.Services.IServices;
 
-namespace PapisPowerPracticeApi.Services
+namespace PapisPowerPracticeApi.Services.CalorieIntake
 {
-    public class CalorieCalculatorService
+    public class CalorieCalculatorService : ICalorieCalculatorService
     {
         private readonly Dictionary<string, double> _activityMultipliers = new()
         {
@@ -36,4 +37,3 @@ namespace PapisPowerPracticeApi.Services
         }
     }
 }
-

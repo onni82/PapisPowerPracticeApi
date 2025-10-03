@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PapisPowerPracticeApi.Models;
-using PapisPowerPracticeApi.Services;
+using PapisPowerPracticeApi.Services.IServices;  
 
 namespace PapisPowerPracticeApi.Controllers
 {
@@ -8,15 +8,13 @@ namespace PapisPowerPracticeApi.Controllers
     [Route("api/[controller]")]
     public class CalorieIntakeController : ControllerBase
     {
-        private readonly CalorieCalculatorService _service;
-
-        // Service is injected via Dependency Injection (Program.cs)
-        public CalorieIntakeController(CalorieCalculatorService service)
+        private readonly ICalorieCalculatorService _service;
+        
+        public CalorieIntakeController(ICalorieCalculatorService service)
         {
             _service = service;
         }
 
-        // POST: api/calorieintake/calculate
         [HttpPost("calculate")]
         public IActionResult CalculateCalories([FromBody] CalorieData data)
         {
@@ -27,7 +25,6 @@ namespace PapisPowerPracticeApi.Controllers
             return Ok(result);
         }
 
-        // GET: api/calorieintake/activity-levels
         [HttpGet("activity-levels")]
         public IActionResult GetActivityLevels()
         {
