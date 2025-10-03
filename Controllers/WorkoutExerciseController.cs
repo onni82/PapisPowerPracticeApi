@@ -18,7 +18,7 @@ namespace PapisPowerPracticeApi.Controllers
         {
             _workoutService = workoutService;
         }
-        [HttpPost("Create workout")]
+        [HttpPost]
         public async Task<ActionResult> CreateWorkoutExercise(CreateWorkoutExerciseDTO exerciseDTO)
         {
             var workout = await _workoutService.CreateWorkoutExerciseAsync(exerciseDTO);
