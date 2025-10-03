@@ -8,5 +8,8 @@
         public int MuscleGroupId { get; set; }
         public MuscleGroup MuscleGroup { get; set; }
         public string VideoUrl { get; set; }
+
+        // Flera-till-flera
+        public ICollection<MuscleGroup> MuscleGroups { get; set; } = new List<MuscleGroup>();
     }
 }
