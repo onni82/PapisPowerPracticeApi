@@ -1,4 +1,4 @@
-﻿namespace PapisPowerPracticeApi.DTOs.Exercise
+﻿namespace PapisPowerPracticeApi.DTOs.Exercise.Request
 {
     public class ExerciseCreateUpdateDto
     {
@@ -7,6 +7,6 @@
         public string? VideoUrl { get; set; }
 
         // Lista med MuscleGroup Ids som användaren skickar in
-        public List<int> MuscleGroup { get; set; } = new();
+        public List<int> MuscleGroupIds { get; set; } = new();
     }
 }

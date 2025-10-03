@@ -1,4 +1,4 @@
-﻿namespace PapisPowerPracticeApi.DTOs.Exercise
+﻿namespace PapisPowerPracticeApi.DTOs.Exercise.Response
 {
     public class ExerciseDto
     {
