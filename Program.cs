@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PapisPowerPracticeApi.Data;
 using PapisPowerPracticeApi.Repositories;
+using PapisPowerPracticeApi.Repositories.Interfaces;
 using PapisPowerPracticeApi.Repositories.IRepositories;
 using PapisPowerPracticeApi.Services;
 using PapisPowerPracticeApi.Services.IServices;
@@ -26,6 +27,9 @@ namespace PapisPowerPracticeApi
             builder.Services.AddControllers();
             builder.Services.AddScoped<IWorkoutExerciseRepository, WorkoutExerciseRepository>();
             builder.Services.AddScoped<IWorkoutExerciseService, WorkoutExerciseService>();
+            builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
+            builder.Services.AddScoped<IExerciseService, ExerciseService>();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
