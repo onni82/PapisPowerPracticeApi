@@ -6,6 +6,7 @@ using PapisPowerPracticeApi.Repositories;
 using PapisPowerPracticeApi.Repositories.Interfaces;
 using PapisPowerPracticeApi.Repositories.IRepositories;
 using PapisPowerPracticeApi.Services;
+using PapisPowerPracticeApi.Services.CalorieIntake;
 using PapisPowerPracticeApi.Services.IServices;
 
 namespace PapisPowerPracticeApi
@@ -29,6 +30,7 @@ namespace PapisPowerPracticeApi
             builder.Services.AddScoped<IWorkoutExerciseService, WorkoutExerciseService>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
             builder.Services.AddScoped<IExerciseService, ExerciseService>();
+            builder.Services.AddScoped<ICalorieCalculatorService, CalorieCalculatorService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
