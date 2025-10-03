@@ -6,7 +6,8 @@ namespace PapisPowerPracticeApi.Models
     public class WorkoutLog
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public string? Notes { get; set; }
 
         // Relation till IdentityUser
