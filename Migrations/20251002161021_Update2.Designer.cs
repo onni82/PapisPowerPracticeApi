@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PapisPowerPracticeApi.Data;
 
@@ -11,9 +12,11 @@ using PapisPowerPracticeApi.Data;
 namespace PapisPowerPracticeApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251002161021_Update2")]
+    partial class Update2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace PapisPowerPracticeApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("ExerciseMuscleGroup", b =>
-                {
-                    b.Property<int>("ExercisesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MuscleGroupsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ExercisesId", "MuscleGroupsId");
-
-                    b.HasIndex("MuscleGroupsId");
-
-                    b.ToTable("ExerciseMuscleGroups", (string)null);
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -247,6 +235,9 @@ namespace PapisPowerPracticeApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MuscleGroupId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -256,6 +247,8 @@ namespace PapisPowerPracticeApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MuscleGroupId");
 
                     b.ToTable("Exercises");
                 });
@@ -343,21 +336,6 @@ namespace PapisPowerPracticeApi.Migrations
                     b.ToTable("WorkoutLogs");
                 });
 
-            modelBuilder.Entity("ExerciseMuscleGroup", b =>
-                {
-                    b.HasOne("PapisPowerPracticeApi.Models.Exercise", null)
-                        .WithMany()
-                        .HasForeignKey("ExercisesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PapisPowerPracticeApi.Models.MuscleGroup", null)
-                        .WithMany()
-                        .HasForeignKey("MuscleGroupsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -407,6 +385,17 @@ namespace PapisPowerPracticeApi.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PapisPowerPracticeApi.Models.Exercise", b =>
+                {
+                    b.HasOne("PapisPowerPracticeApi.Models.MuscleGroup", "MuscleGroup")
+                        .WithMany()
+                        .HasForeignKey("MuscleGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MuscleGroup");
                 });
 
             modelBuilder.Entity("PapisPowerPracticeApi.Models.WorkoutExercise", b =>
