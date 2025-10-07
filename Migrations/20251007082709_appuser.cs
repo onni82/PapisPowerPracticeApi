@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PapisPowerPracticeApi.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstUpdate : Migration
+    public partial class appuser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,21 @@ namespace PapisPowerPracticeApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Exercises",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VideoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Exercises", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -176,7 +191,8 @@ namespace PapisPowerPracticeApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -192,51 +208,53 @@ namespace PapisPowerPracticeApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Exercises",
+                name: "ExerciseMuscleGroups",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MuscleGroupId = table.Column<int>(type: "int", nullable: false),
-                    VideoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ExercisesId = table.Column<int>(type: "int", nullable: false),
+                    MuscleGroupsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Exercises", x => x.Id);
+                    table.PrimaryKey("PK_ExerciseMuscleGroups", x => new { x.ExercisesId, x.MuscleGroupsId });
                     table.ForeignKey(
-                        name: "FK_Exercises_MuscleGroups_MuscleGroupId",
-                        column: x => x.MuscleGroupId,
+                        name: "FK_ExerciseMuscleGroups_Exercises_ExercisesId",
+                        column: x => x.ExercisesId,
+                        principalTable: "Exercises",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExerciseMuscleGroups_MuscleGroups_MuscleGroupsId",
+                        column: x => x.MuscleGroupsId,
                         principalTable: "MuscleGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "WorkoutExcercises",
+                name: "WorkoutExercises",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     WorkoutLogId = table.Column<int>(type: "int", nullable: false),
                     ExcerciseId = table.Column<int>(type: "int", nullable: false),
-                    exerciseId = table.Column<int>(type: "int", nullable: false),
+                    ExerciseId = table.Column<int>(type: "int", nullable: false),
                     Sets = table.Column<int>(type: "int", nullable: false),
                     Reps = table.Column<int>(type: "int", nullable: false),
                     Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkoutExcercises", x => x.Id);
+                    table.PrimaryKey("PK_WorkoutExercises", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WorkoutExcercises_Exercises_exerciseId",
-                        column: x => x.exerciseId,
+                        name: "FK_WorkoutExercises_Exercises_ExerciseId",
+                        column: x => x.ExerciseId,
                         principalTable: "Exercises",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_WorkoutExcercises_WorkoutLogs_WorkoutLogId",
+                        name: "FK_WorkoutExercises_WorkoutLogs_WorkoutLogId",
                         column: x => x.WorkoutLogId,
                         principalTable: "WorkoutLogs",
                         principalColumn: "Id",
@@ -283,18 +301,18 @@ namespace PapisPowerPracticeApi.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Exercises_MuscleGroupId",
-                table: "Exercises",
-                column: "MuscleGroupId");
+                name: "IX_ExerciseMuscleGroups_MuscleGroupsId",
+                table: "ExerciseMuscleGroups",
+                column: "MuscleGroupsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkoutExcercises_exerciseId",
-                table: "WorkoutExcercises",
-                column: "exerciseId");
+                name: "IX_WorkoutExercises_ExerciseId",
+                table: "WorkoutExercises",
+                column: "ExerciseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkoutExcercises_WorkoutLogId",
-                table: "WorkoutExcercises",
+                name: "IX_WorkoutExercises_WorkoutLogId",
+                table: "WorkoutExercises",
                 column: "WorkoutLogId");
 
             migrationBuilder.CreateIndex(
@@ -322,19 +340,22 @@ namespace PapisPowerPracticeApi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "WorkoutExcercises");
+                name: "ExerciseMuscleGroups");
+
+            migrationBuilder.DropTable(
+                name: "WorkoutExercises");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "MuscleGroups");
 
             migrationBuilder.DropTable(
                 name: "Exercises");
 
             migrationBuilder.DropTable(
                 name: "WorkoutLogs");
-
-            migrationBuilder.DropTable(
-                name: "MuscleGroups");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

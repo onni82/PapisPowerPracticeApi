@@ -12,8 +12,8 @@ using PapisPowerPracticeApi.Data;
 namespace PapisPowerPracticeApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251002161021_Update2")]
-    partial class Update2
+    [Migration("20251007083716_appuser2")]
+    partial class appuser2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace PapisPowerPracticeApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ExerciseMuscleGroup", b =>
+                {
+                    b.Property<int>("ExercisesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MuscleGroupsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ExercisesId", "MuscleGroupsId");
+
+                    b.HasIndex("MuscleGroupsId");
+
+                    b.ToTable("ExerciseMuscleGroups", (string)null);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -89,6 +104,11 @@ namespace PapisPowerPracticeApi.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -140,6 +160,10 @@ namespace PapisPowerPracticeApi.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator().HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -235,9 +259,6 @@ namespace PapisPowerPracticeApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MuscleGroupId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -247,8 +268,6 @@ namespace PapisPowerPracticeApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MuscleGroupId");
 
                     b.ToTable("Exercises");
                 });
@@ -316,6 +335,9 @@ namespace PapisPowerPracticeApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime2");
 
@@ -331,9 +353,40 @@ namespace PapisPowerPracticeApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("WorkoutLogs");
+                });
+
+            modelBuilder.Entity("PapisPowerPracticeApi.Models.ApplicationUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("Firstname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
+                });
+
+            modelBuilder.Entity("ExerciseMuscleGroup", b =>
+                {
+                    b.HasOne("PapisPowerPracticeApi.Models.Exercise", null)
+                        .WithMany()
+                        .HasForeignKey("ExercisesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PapisPowerPracticeApi.Models.MuscleGroup", null)
+                        .WithMany()
+                        .HasForeignKey("MuscleGroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -387,17 +440,6 @@ namespace PapisPowerPracticeApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PapisPowerPracticeApi.Models.Exercise", b =>
-                {
-                    b.HasOne("PapisPowerPracticeApi.Models.MuscleGroup", "MuscleGroup")
-                        .WithMany()
-                        .HasForeignKey("MuscleGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MuscleGroup");
-                });
-
             modelBuilder.Entity("PapisPowerPracticeApi.Models.WorkoutExercise", b =>
                 {
                     b.HasOne("PapisPowerPracticeApi.Models.Exercise", "Exercise")
@@ -419,6 +461,10 @@ namespace PapisPowerPracticeApi.Migrations
 
             modelBuilder.Entity("PapisPowerPracticeApi.Models.WorkoutLog", b =>
                 {
+                    b.HasOne("PapisPowerPracticeApi.Models.ApplicationUser", null)
+                        .WithMany("WorkoutLogs")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -431,6 +477,11 @@ namespace PapisPowerPracticeApi.Migrations
             modelBuilder.Entity("PapisPowerPracticeApi.Models.WorkoutLog", b =>
                 {
                     b.Navigation("WorkoutExercises");
+                });
+
+            modelBuilder.Entity("PapisPowerPracticeApi.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("WorkoutLogs");
                 });
 #pragma warning restore 612, 618
         }
