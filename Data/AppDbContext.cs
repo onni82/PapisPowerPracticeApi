@@ -9,7 +9,7 @@ namespace PapisPowerPracticeApi.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
-
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<WorkoutLog> WorkoutLogs { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<WorkoutExercise> WorkoutExercises { get; set; }
