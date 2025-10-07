@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Auth\Response\" />
-    <Folder Include="Features\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
 
