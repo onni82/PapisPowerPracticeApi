@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36414.22 d17.14
+VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PapisPowerPracticeApi", "PapisPowerPracticeApi.csproj", "{0B27B959-32D0-4C63-BCDD-3A3533D4B928}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PapisPowerPracticeApi.Tests", "..\PapisPowerPracticeApi.Tests\PapisPowerPracticeApi.Tests.csproj", "{1DDDF7B9-4F84-4809-AED2-2D54342ECF5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{0B27B959-32D0-4C63-BCDD-3A3533D4B928}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B27B959-32D0-4C63-BCDD-3A3533D4B928}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B27B959-32D0-4C63-BCDD-3A3533D4B928}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DDDF7B9-4F84-4809-AED2-2D54342ECF5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DDDF7B9-4F84-4809-AED2-2D54342ECF5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DDDF7B9-4F84-4809-AED2-2D54342ECF5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DDDF7B9-4F84-4809-AED2-2D54342ECF5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
