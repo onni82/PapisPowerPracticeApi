@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PapisPowerPracticeApi.DTOs.Auth.Request;
+using PapisPowerPracticeApi.Models;
 using System.Collections.ObjectModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,10 +16,10 @@ namespace PapisPowerPracticeApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager <IdentityUser> _userManager;
+        private readonly UserManager <ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
 
-        public AuthController(UserManager<IdentityUser> userManager,IConfiguration configuration)
+        public AuthController(UserManager<ApplicationUser> userManager,IConfiguration configuration)
         {
             _userManager = userManager;
             _configuration = configuration;
@@ -27,7 +28,7 @@ namespace PapisPowerPracticeApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserDTO userDTO)
         {
-            var user = new IdentityUser
+            var user = new ApplicationUser
             {
                 UserName = userDTO.Email,
                 Email = userDTO.Email
