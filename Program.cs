@@ -52,6 +52,8 @@ namespace PapisPowerPracticeApi
             builder.Services.AddScoped<IWorkoutExerciseService, WorkoutExerciseService>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
             builder.Services.AddScoped<IExerciseService, ExerciseService>();
+            builder.Services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
+            builder.Services.AddScoped<IMuscleGroupService, MuscleGroupService>();
             builder.Services.AddScoped<ICalorieCalculatorService, CalorieCalculatorService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
