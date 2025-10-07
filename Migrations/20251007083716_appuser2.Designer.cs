@@ -12,8 +12,13 @@ using PapisPowerPracticeApi.Data;
 namespace PapisPowerPracticeApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
+<<<<<<<< HEAD:Migrations/20251007080858_addedmusclegroups.Designer.cs
+    [Migration("20251007080858_addedmusclegroups")]
+    partial class addedmusclegroups
+========
     [Migration("20251007083716_appuser2")]
     partial class appuser2
+>>>>>>>> 3fb40d138695da8538eaf555712efab55e609a7c:Migrations/20251007083716_appuser2.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -360,6 +365,8 @@ namespace PapisPowerPracticeApi.Migrations
                     b.ToTable("WorkoutLogs");
                 });
 
+<<<<<<<< HEAD:Migrations/20251007080858_addedmusclegroups.Designer.cs
+========
             modelBuilder.Entity("PapisPowerPracticeApi.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -374,6 +381,7 @@ namespace PapisPowerPracticeApi.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
+>>>>>>>> 3fb40d138695da8538eaf555712efab55e609a7c:Migrations/20251007083716_appuser2.Designer.cs
             modelBuilder.Entity("ExerciseMuscleGroup", b =>
                 {
                     b.HasOne("PapisPowerPracticeApi.Models.Exercise", null)
