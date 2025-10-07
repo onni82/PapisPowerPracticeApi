@@ -12,8 +12,8 @@ using PapisPowerPracticeApi.Data;
 namespace PapisPowerPracticeApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251003123129_jwt")]
-    partial class jwt
+    [Migration("20251007082828_fixed")]
+    partial class @fixed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PapisPowerPracticeApi.Data;
+using PapisPowerPracticeApi.Infrastructure;
+using PapisPowerPracticeApi.Models;
 using PapisPowerPracticeApi.Repositories;
 using PapisPowerPracticeApi.Repositories.Interfaces;
 using PapisPowerPracticeApi.Repositories.IRepositories;
@@ -11,12 +13,13 @@ using PapisPowerPracticeApi.Services;
 using PapisPowerPracticeApi.Services.CalorieIntake;
 using PapisPowerPracticeApi.Services.IServices;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PapisPowerPracticeApi
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +28,7 @@ namespace PapisPowerPracticeApi
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnect"));
             });
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
             builder.Services.AddAuthentication(options =>
@@ -66,9 +69,14 @@ namespace PapisPowerPracticeApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                await DbInitializer.SeedRolesAsync(roleManager);
+            }
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
