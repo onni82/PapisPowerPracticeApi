@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PapisPowerPracticeApi.Migrations
 {
     /// <inheritdoc />
-    public partial class appuser : Migration
+    public partial class rebuiltDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,6 +30,9 @@ namespace PapisPowerPracticeApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true),
+                    Firstname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -194,11 +197,17 @@ namespace PapisPowerPracticeApi.Migrations
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WorkoutLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkoutLogs_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_WorkoutLogs_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -314,6 +323,11 @@ namespace PapisPowerPracticeApi.Migrations
                 name: "IX_WorkoutExercises_WorkoutLogId",
                 table: "WorkoutExercises",
                 column: "WorkoutLogId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkoutLogs_ApplicationUserId",
+                table: "WorkoutLogs",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkoutLogs_UserId",
