@@ -1,4 +1,4 @@
-﻿namespace PapisPowerPracticeApi.Services
+﻿namespace PapisPowerPracticeApi.Services.IServices
 {
     public interface IChatService
     {
