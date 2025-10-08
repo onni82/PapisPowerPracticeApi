@@ -18,7 +18,7 @@ namespace PapisPowerPracticeApi.Repositories
         {
             return await _context.ChatMessages
                 .Where(m => m.UserId == userId)
-                .OrderBy(m => m.Timestamp)
+                .OrderByDescending(m => m.Timestamp)
                 .ToListAsync();
         }
 
