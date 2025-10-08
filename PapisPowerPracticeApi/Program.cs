@@ -59,6 +59,12 @@ namespace PapisPowerPracticeApi
             builder.Services.AddScoped<IMuscleGroupService, MuscleGroupService>();
             builder.Services.AddScoped<ICalorieCalculatorService, CalorieCalculatorService>();
 
+            // OpenAI-klient
+            builder.Services.AddHttpClient("OpenAI", client =>
+            {
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {builder.Configuration["OpenAI:ApiKey"]}");
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
