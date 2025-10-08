@@ -57,5 +57,11 @@ namespace PapisPowerPracticeApi.Services
 
             return aiResponse;
         }
+
+        public async Task<IEnumerable<ChatMessage>> GetChatHistoryAsync(string userId, int limit = 20)
+        {
+            var messages = await _repository.GetChatHistoryAsync(userId);
+            return messages.OrderByDescending(m => m.Timestamp).Take(limit);
+        }
     }
 }
