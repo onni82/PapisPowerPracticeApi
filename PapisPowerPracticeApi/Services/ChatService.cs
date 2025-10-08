@@ -1,89 +1,60 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using OpenAI;
-using OpenAI.Chat;
-using PapisPowerPracticeApi.Data;
-using PapisPowerPracticeApi.Models;
-using PapisPowerPracticeApi.Services.IServices;
+﻿using PapisPowerPracticeApi.Models;
+using PapisPowerPracticeApi.Repositories.IRepositories;
 
 namespace PapisPowerPracticeApi.Services
 {
     public class ChatService : IChatService
     {
-        private readonly AppDbContext _context;
-        private readonly ChatClient _chatClient;
+        private readonly IChatRepository _repository;
+        private readonly HttpClient _httpClient;
 
-        public ChatService(AppDbContext context, IConfiguration configuration)
+        public ChatService(IChatRepository repository, IHttpClientFactory httpClientFactory)
         {
-            _context = context;
-
-            var apiKey = configuration["OpenAI:ApiKey"];
-            if (string.IsNullOrWhiteSpace(apiKey))
-                throw new InvalidOperationException("OpenAI API key is missing in configuration.");
-
-            // Skapa klient för GPT-modell
-            _chatClient = new ChatClient("gpt-4o-mini", apiKey);
+            _repository = repository;
+            _httpClient = httpClientFactory.CreateClient("OpenAI");
         }
 
-        public async Task<string> GetAiResponseAsync(string userId, string message)
+        public async Task<string> GetAiResponseAsync(string userId, string userMessage)
         {
-            // Spara användarens meddelande
-            var userMsg = new PapisPowerPracticeApi.Models.ChatMessage
+            // Spara användarmeddelande
+            var userMsg = new ChatMessage
             {
                 UserId = userId,
                 Role = "user",
-                Message = message,
-                Timestamp = DateTime.UtcNow
+                Message = userMessage
             };
-            _context.ChatMessages.Add(userMsg);
-            await _context.SaveChangesAsync();
 
-            // Hämta historik
-            var history = await _context.ChatMessages
-                .Where(m => m.UserId == userId)
-                .OrderByDescending(m => m.Timestamp)
-                .Take(10)
-                .ToListAsync();
+            await _repository.AddMessageAsync(userMsg);
 
-            // Bygg upp OpenAI-meddelanden
-            var chatMessages = new List<ChatMessage>();
-
-            foreach (var m in history.OrderBy(m => m.Timestamp))
+            // Skicka till extern LLM (ex. OpenAI)
+            var request = new
             {
-                var role = m.Role == "assistant" ? ChatRole.Assistant : ChatRole.User;
-                chatMessages.Add(new ChatMessage(role, m.Message!));
-            }
+                model = "gpt-3.5-turbo",
+                messages = new[]
+                {
+                    new { role = "system", content = "Du är en personlig tränare. Skapa träningsscheman utifrån användarens mål." },
+                    new { role = "user", content = userMessage }
+                }
+            };
 
-            // Lägg till det nya användarmeddelandet sist
-            chatMessages.Add(new ChatMessage(ChatRole.User, message));
+            var response = await _httpClient.PostAsJsonAsync("https://api.openai.com/v1/chat/completions", request);
+            response.EnsureSuccessStatusCode();
 
-            // Skicka till OpenAI
-            var response = await _chatClient.CompleteChatAsync(chatMessages);
-
-            var aiText = response.Content[0].Text ?? "Tyvärr, jag kunde inte generera ett svar just nu.";
+            var result = await response.Content.ReadFromJsonAsync<dynamic>();
+            string aiResponse = result?.choices?[0]?.message?.content ?? "Kunde inte generera svar.";
 
             // Spara AI-svar
-            var aiMsg = new PapisPowerPracticeApi.Models.ChatMessage
+            var aiMsg = new ChatMessage
             {
                 UserId = userId,
                 Role = "assistant",
-                Message = aiText,
-                Timestamp = DateTime.UtcNow
+                Message = aiResponse
             };
 
-            _context.ChatMessages.Add(aiMsg);
-            await _context.SaveChangesAsync();
+            await _repository.AddMessageAsync(aiMsg);
+            await _repository.SaveChangesAsync();
 
-            return aiText;
-        }
-
-        public async Task<IEnumerable<PapisPowerPracticeApi.Models.ChatMessage>> GetChatHistoryAsync(string userId, int limit = 20)
-        {
-            return await _context.ChatMessages
-                .Where(m => m.UserId == userId)
-                .OrderByDescending(m => m.Timestamp)
-                .Take(limit)
-                .ToListAsync();
+            return aiResponse;
         }
     }
 }
