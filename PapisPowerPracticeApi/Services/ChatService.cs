@@ -1,5 +1,6 @@
 ﻿using PapisPowerPracticeApi.Models;
 using PapisPowerPracticeApi.Repositories.IRepositories;
+using PapisPowerPracticeApi.Services.IServices;
 
 namespace PapisPowerPracticeApi.Services
 {
