@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PapisPowerPracticeApi.Services;
+using PapisPowerPracticeApi.Services.IServices;
 
 namespace PapisPowerPracticeApi.Controllers
 {
