@@ -23,6 +23,9 @@ namespace PapisPowerPracticeApi.Controllers
         public async Task<IActionResult> SendMessage([FromBody] string message)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User ID not found in token.");
+
             var response = await _chatService.GetAiResponseAsync(userId, message);
 
             return Ok(new { response });
