@@ -64,6 +64,7 @@ namespace PapisPowerPracticeApi.Controllers
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email!)
             };
             claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
