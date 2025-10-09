@@ -15,14 +15,14 @@ namespace PapisPowerPracticeApi.Services
             _httpClient = httpClientFactory.CreateClient("OpenAI");
         }
 
-        public async Task<string> GetAiResponseAsync(string userId, string userMessage)
+        public async Task<string> GetAiResponseAsync(string userId, string message)
         {
             // Spara användarmeddelande
             var userMsg = new ChatMessage
             {
                 UserId = userId,
                 Role = "user",
-                Message = userMessage
+                Message = message
             };
 
             await _repository.AddMessageAsync(userMsg);
@@ -34,7 +34,7 @@ namespace PapisPowerPracticeApi.Services
                 messages = new[]
                 {
                     new { role = "system", content = "Du är en personlig tränare. Skapa träningsscheman utifrån användarens mål." },
-                    new { role = "user", content = userMessage }
+                    new { role = "user", content = message }
                 }
             };
 
