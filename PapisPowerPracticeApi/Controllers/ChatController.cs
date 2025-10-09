@@ -36,6 +36,9 @@ namespace PapisPowerPracticeApi.Controllers
         public async Task<IActionResult> GetHistory([FromQuery] int limit = 20)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId)) return Unauthorized("User ID not found in toiken.");
+
             var messages = await _chatService.GetChatHistoryAsync(userId, limit);
 
             var result = messages
