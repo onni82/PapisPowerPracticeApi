@@ -1,9 +1,13 @@
-﻿namespace PapisPowerPracticeApi.DTOs.Exercise.Response
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PapisPowerPracticeApi.DTOs.Exercise.Response
 {
     public class ExerciseDto
     {
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Description { get; set; }
         public string? VideoUrl { get; set; }
 

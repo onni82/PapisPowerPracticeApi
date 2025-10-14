@@ -63,7 +63,7 @@ namespace PapisPowerPracticeApi.Controllers
             {
                 Name = dto.Name,
                 Description = dto.Description,
-                VideoUrl = dto.VideoUrl,
+                VideoUrl = dto.VideoUrl ?? string.Empty,
                 MuscleGroups = dto.MuscleGroupIds.Select(id => new MuscleGroup { Id = id }).ToList()
             };
 
@@ -92,7 +92,7 @@ namespace PapisPowerPracticeApi.Controllers
                 Id = id,
                 Name = dto.Name,
                 Description = dto.Description,
-                VideoUrl = dto.VideoUrl,
+                VideoUrl = dto.VideoUrl ?? string.Empty,
                 MuscleGroups = dto.MuscleGroupIds.Select(id => new MuscleGroup { Id = id }).ToList()
             };
 
