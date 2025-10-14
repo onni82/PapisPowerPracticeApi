@@ -2,7 +2,7 @@ name: Build and deploy .NET Core application to Web App PapisPowerPracticeApi wi
 on:
   push:
     branches:
-    - 28-skapa-logout-funktion
+    - master
 env:
   AZURE_WEBAPP_NAME: PapisPowerPracticeApi
   AZURE_WEBAPP_PACKAGE_PATH: PapisPowerPracticeApi\publish
