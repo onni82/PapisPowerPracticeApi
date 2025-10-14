@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PapisPowerPracticeApi.DTOs.Auth.Request;
-using PapisPowerPracticeApi.Helpers;
 using PapisPowerPracticeApi.Models;
 using System.Collections.ObjectModel;
 using System.IdentityModel.Tokens.Jwt;
@@ -39,10 +38,7 @@ namespace PapisPowerPracticeApi.Controllers
 
             if(!identityResult.Succeeded)
             {
-                var errorMessage = IdentityErrorMapper.MapErrors(identityResult.Errors);
-
-                
-                return BadRequest(new {message = errorMessage});
+                return BadRequest(identityResult.Errors);
             }
 
             var addToResult = await _userManager.AddToRoleAsync(user, "User");
@@ -68,9 +64,8 @@ namespace PapisPowerPracticeApi.Controllers
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email!),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email!)
             };
             claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
@@ -94,11 +89,6 @@ namespace PapisPowerPracticeApi.Controllers
                 
         }
 
-        [HttpPost("Logout")]
-        public IActionResult LogoutUser()
-        {
-            return NoContent();
-        }
         
     }
 }
