@@ -1,5 +1,6 @@
 ﻿using PapisPowerPracticeApi.Models;
 using PapisPowerPracticeApi.Repositories.Interfaces;
+using PapisPowerPracticeApi.Repositories.IRepositories;
 using PapisPowerPracticeApi.Services.IServices;
 
 namespace PapisPowerPracticeApi.Services
@@ -7,11 +8,14 @@ namespace PapisPowerPracticeApi.Services
     public class ExerciseService : IExerciseService
     {
         private readonly IExerciseRepository _repository;
+        private readonly IMuscleGroupRepository _muscleGroupRepository;
 
-        public ExerciseService(IExerciseRepository repository)
+        public ExerciseService(IExerciseRepository repository, IMuscleGroupRepository muscleGroupRepository)
         {
             _repository = repository;
+            _muscleGroupRepository = muscleGroupRepository;
         }
+
 
         public async Task<IEnumerable<Exercise>> GetAllExercisesAsync()
         {
@@ -25,6 +29,24 @@ namespace PapisPowerPracticeApi.Services
 
         public async Task<Exercise> CreateExerciseAsync(Exercise exercise)
         {
+            var muscleGroups = new List<MuscleGroup>();
+
+            foreach (var mg in exercise.MuscleGroups)
+            {
+                var existingMuscleGroup = await _muscleGroupRepository.GetMuscleGroupByIdAsync(mg.Id);
+                if(existingMuscleGroup != null)
+                {
+                    muscleGroups.Add(existingMuscleGroup);
+                }
+                else
+                {
+                    throw new ArgumentException($"Musclesgroup with id {mg.Id} does not exist. ");
+                }
+
+            }
+
+            exercise.MuscleGroups = muscleGroups;
+
             await _repository.AddAsync(exercise);
             await _repository.SaveChangesAsync();
             return exercise;
