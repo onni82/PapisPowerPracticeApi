@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PapisPowerPracticeApi.DTOs.Auth.Request;
+using PapisPowerPracticeApi.Helpers;
 using PapisPowerPracticeApi.Models;
 using System.Collections.ObjectModel;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,10 +17,10 @@ namespace PapisPowerPracticeApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager <ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
 
-        public AuthController(UserManager<ApplicationUser> userManager,IConfiguration configuration)
+        public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _configuration = configuration;
@@ -36,13 +37,16 @@ namespace PapisPowerPracticeApi.Controllers
 
             var identityResult = await _userManager.CreateAsync(user, userDTO.Password);
 
-            if(!identityResult.Succeeded)
+            if (!identityResult.Succeeded)
             {
-                return BadRequest(identityResult.Errors);
+                var errorMessage = IdentityErrorMapper.MapErrors(identityResult.Errors);
+
+
+                return BadRequest(new { message = errorMessage });
             }
 
             var addToResult = await _userManager.AddToRoleAsync(user, "User");
-            if(!addToResult.Succeeded)
+            if (!addToResult.Succeeded)
             {
                 return BadRequest(addToResult.Errors);
             }
@@ -64,8 +68,9 @@ namespace PapisPowerPracticeApi.Controllers
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email!)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
             claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
@@ -86,9 +91,14 @@ namespace PapisPowerPracticeApi.Controllers
             var accessToken = tokenHandler.WriteToken(token);
 
             return Ok(new { accessToken });
-                
+
         }
 
-        
+        [HttpPost("Logout")]
+        public IActionResult LogoutUser()
+        {
+            return NoContent();
+        }
+
     }
 }
