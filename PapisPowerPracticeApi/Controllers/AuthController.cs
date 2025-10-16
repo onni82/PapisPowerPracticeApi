@@ -17,10 +17,10 @@ namespace PapisPowerPracticeApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager <ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
 
-        public AuthController(UserManager<ApplicationUser> userManager,IConfiguration configuration)
+        public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _configuration = configuration;
@@ -37,16 +37,16 @@ namespace PapisPowerPracticeApi.Controllers
 
             var identityResult = await _userManager.CreateAsync(user, userDTO.Password);
 
-            if(!identityResult.Succeeded)
+            if (!identityResult.Succeeded)
             {
                 var errorMessage = IdentityErrorMapper.MapErrors(identityResult.Errors);
 
-                
-                return BadRequest(new {message = errorMessage});
+
+                return BadRequest(new { message = errorMessage });
             }
 
             var addToResult = await _userManager.AddToRoleAsync(user, "User");
-            if(!addToResult.Succeeded)
+            if (!addToResult.Succeeded)
             {
                 return BadRequest(addToResult.Errors);
             }
@@ -91,7 +91,7 @@ namespace PapisPowerPracticeApi.Controllers
             var accessToken = tokenHandler.WriteToken(token);
 
             return Ok(new { accessToken });
-                
+
         }
 
         [HttpPost("Logout")]
@@ -99,6 +99,6 @@ namespace PapisPowerPracticeApi.Controllers
         {
             return NoContent();
         }
-        
+
     }
 }
