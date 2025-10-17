@@ -1,4 +1,5 @@
 ﻿using PapisPowerPracticeApi.DTOs;
+using PapisPowerPracticeApi.DTOs.Exercise.Response;
 using PapisPowerPracticeApi.Models;
 using PapisPowerPracticeApi.Repositories.IRepositories;
 using PapisPowerPracticeApi.Services.IServices;
@@ -22,6 +23,16 @@ namespace PapisPowerPracticeApi.Services
                 Id = r.Id,
                 Name = r.Name,
                 ImageUrl = r.ImageUrl,
+
+                Exercises = r.Exercises.Select(e => new ExerciseDto
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Description = e.Description,
+                    VideoUrl = e.VideoUrl,
+
+                }).ToList()
+
             }).ToList();
             return muscleGroupDTO;
         }
