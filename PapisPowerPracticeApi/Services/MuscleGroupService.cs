@@ -24,7 +24,7 @@ namespace PapisPowerPracticeApi.Services
                 Name = r.Name,
                 ImageUrl = r.ImageUrl,
 
-                Exercises = r.Exercises.Select(e => new ExerciseDto
+                Exercises = r.Exercises.Select(e => new ExerciseDTO
                 {
                     Id = e.Id,
                     Name = e.Name,
@@ -43,11 +43,19 @@ namespace PapisPowerPracticeApi.Services
             {
                 return null;
             }
-            var muscleGroupDTO = new MuscleGroupDTO
+            var muscleGroupDTO =  new MuscleGroupDTO
             {
                 Id = muscleGroup.Id,
                 Name = muscleGroup.Name,
                 ImageUrl = muscleGroup.ImageUrl,
+
+                Exercises = muscleGroup.Exercises.Select(e => new ExerciseDTO
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Description = e.Description,
+                    VideoUrl = e.VideoUrl
+                }).ToList()
             };
             return muscleGroupDTO;
         }

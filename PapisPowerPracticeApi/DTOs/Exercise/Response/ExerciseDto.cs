@@ -2,7 +2,7 @@
 
 namespace PapisPowerPracticeApi.DTOs.Exercise.Response
 {
-    public class ExerciseDto
+    public class ExerciseDTO
     {
         public int Id { get; set; }
         [Required]

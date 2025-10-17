@@ -11,6 +11,6 @@ namespace PapisPowerPracticeApi.DTOs
         public string? ImageUrl { get; set; }
 
 
-        public List<ExerciseDto> Exercises { get; set; } = new();
+        public List<ExerciseDTO> Exercises { get; set; } = new();
     }
 }
