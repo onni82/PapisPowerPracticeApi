@@ -8,7 +8,7 @@ namespace PapisPowerPracticeApi.DTOs.WorkoutLog
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public string? Notes { get; set; }
-        public string UserId { get; set; } = string.Empty;
+
 
     }
 }

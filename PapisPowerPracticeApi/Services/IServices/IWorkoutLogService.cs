@@ -7,7 +7,7 @@ namespace PapisPowerPracticeApi.Services.IServices
     {
         Task<List<GetWorkoutLogDTO>> GetAllWorkoutLogsAsync();
         Task<GetWorkoutLogDTO> GetWorkoutLogByIdAsync(int workoutLogid);
-        Task<int> CreateWorkoutLogAsync(CreateWorkoutLogDTO createWorkoutLogDTO);
+        Task<int> CreateWorkoutLogAsync(CreateWorkoutLogDTO createWorkoutLogDTO, string userId);
         Task<bool> DeleteWorkoutLogAsync(int workoutLogId);
         Task<bool> UpdateWorkoutLogAsync(GetWorkoutLogDTO getworkoutLogDTO);
     }

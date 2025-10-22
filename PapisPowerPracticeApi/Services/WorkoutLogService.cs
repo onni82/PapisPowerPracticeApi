@@ -44,14 +44,14 @@ namespace PapisPowerPracticeApi.Services
             };
             return getworkoutLogDTO;
         }
-        public async Task<int> CreateWorkoutLogAsync(CreateWorkoutLogDTO createworkoutLogDTO)
+        public async Task<int> CreateWorkoutLogAsync(CreateWorkoutLogDTO createworkoutLogDTO, string userId)
         {
             var workoutLog = new WorkoutLog
             {
                 StartTime = createworkoutLogDTO.StartTime,
                 EndTime = createworkoutLogDTO.EndTime,
                 Notes = createworkoutLogDTO.Notes,
-                UserId = createworkoutLogDTO.UserId
+                UserId = userId
             };
             var addedWorkoutLog = await _workoutLogRepository.AddWorkoutLogAsync(workoutLog);
             return addedWorkoutLog;

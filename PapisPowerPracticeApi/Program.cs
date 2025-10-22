@@ -60,6 +60,8 @@ namespace PapisPowerPracticeApi
             builder.Services.AddScoped<IChatRepository, ChatRepository>();
             builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<ICalorieCalculatorService, CalorieCalculatorService>();
+            builder.Services.AddScoped<IWorkoutLogRepository, WorkoutLogRepository>();
+            builder.Services.AddScoped<IWorkoutLogService, WorkoutLogService>();
 
             // OpenAI-klient
             builder.Services.AddHttpClient("OpenAI", client =>
