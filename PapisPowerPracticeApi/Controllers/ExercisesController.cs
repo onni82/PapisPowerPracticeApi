@@ -24,7 +24,7 @@ namespace PapisPowerPracticeApi.Controllers
         {
             var exercise = await _service.GetAllExercisesAsync();
 
-            var result = exercise.Select(e => new ExerciseDto
+            var result = exercise.Select(e => new ExerciseDTO
             {
                 Id = e.Id,
                 Name = e.Name,
@@ -43,7 +43,7 @@ namespace PapisPowerPracticeApi.Controllers
             var exercise = await _service.GetExerciseByIdAsync(id);
             if (exercise == null) return NotFound();
 
-            return Ok(new ExerciseDto
+            return Ok(new ExerciseDTO
             {
                 Id = exercise.Id,
                 Name = exercise.Name,
@@ -69,7 +69,7 @@ namespace PapisPowerPracticeApi.Controllers
 
             var created = await _service.CreateExerciseAsync(exercise);
 
-            var result = new ExerciseDto
+            var result = new ExerciseDTO
             {
                 Id = created.Id,
                 Name = created.Name,
@@ -99,7 +99,7 @@ namespace PapisPowerPracticeApi.Controllers
             var updated = await _service.UpdateExerciseAsync(id, exercise);
             if (updated == null) return NotFound();
 
-            var result = new ExerciseDto
+            var result = new ExerciseDTO
             {
                 Id = updated.Id,
                 Name = updated.Name,

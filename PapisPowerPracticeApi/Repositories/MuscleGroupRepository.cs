@@ -33,13 +33,16 @@ namespace PapisPowerPracticeApi.Repositories
         }
         public async Task<List<MuscleGroup>> GetAllMuscleGroupsAsync()
         {
-            var muscleGroups = await _dbContext.MuscleGroups.ToListAsync();
+            var muscleGroups = await _dbContext.MuscleGroups
+                .Include(m => m.Exercises)
+                .ToListAsync();
 
             return muscleGroups;
         }
         public async Task<MuscleGroup> GetMuscleGroupByIdAsync(int muscleGroupId)
         {
             var muscleGroup = await _dbContext.MuscleGroups
+                .Include(e => e.Exercises)
                 .FirstOrDefaultAsync(s => s.Id == muscleGroupId);
 
             return muscleGroup;

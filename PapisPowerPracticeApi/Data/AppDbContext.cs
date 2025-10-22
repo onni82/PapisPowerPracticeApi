@@ -25,6 +25,8 @@ namespace PapisPowerPracticeApi.Data
                 .HasMany(e => e.MuscleGroups)
                 .WithMany(m => m.Exercises)
                 .UsingEntity(j => j.ToTable("ExerciseMuscleGroups"));
+
+            
         }
     }
 }

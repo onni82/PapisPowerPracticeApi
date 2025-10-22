@@ -40,7 +40,7 @@ namespace PapisPowerPracticeApi.Tests.Controllers
 
 			// Assert
 			var okResult = Assert.IsType<OkObjectResult>(result);
-			var returnedList = Assert.IsAssignableFrom<IEnumerable<ExerciseDto>>(okResult.Value);
+			var returnedList = Assert.IsAssignableFrom<IEnumerable<ExerciseDTO>>(okResult.Value);
 			Assert.Equal(2, returnedList.Count());
 		}
 
@@ -64,7 +64,7 @@ namespace PapisPowerPracticeApi.Tests.Controllers
 
 			// Assert
 			var okResult = Assert.IsType<OkObjectResult>(result);
-			var dto = Assert.IsType<ExerciseDto>(okResult.Value);
+			var dto = Assert.IsType<ExerciseDTO>(okResult.Value);
 			Assert.Equal("Marklyft", dto.Name);
 			Assert.Contains("Rygg", dto.MuscleGroups);
 		}
@@ -110,7 +110,7 @@ namespace PapisPowerPracticeApi.Tests.Controllers
 
 			// Assert
 			var createdResult = Assert.IsType<CreatedAtActionResult>(result);
-			var dto = Assert.IsType<ExerciseDto>(createdResult.Value);
+			var dto = Assert.IsType<ExerciseDTO>(createdResult.Value);
 			Assert.Equal(10, dto.Id);
 			Assert.Equal("Pullups", dto.Name);
 		}

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PapisPowerPracticeApi.DTOs.Exercise.Response;
+using System.ComponentModel.DataAnnotations;
 
 namespace PapisPowerPracticeApi.DTOs
 {
@@ -8,5 +9,8 @@ namespace PapisPowerPracticeApi.DTOs
         [Required]
         public string Name { get; set; }
         public string? ImageUrl { get; set; }
+
+
+        public List<ExerciseDTO> Exercises { get; set; } = new();
     }
 }
