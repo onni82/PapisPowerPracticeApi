@@ -1,0 +1,58 @@
+﻿using Microsoft.EntityFrameworkCore;
+using PapisPowerPracticeApi.Data;
+using PapisPowerPracticeApi.Models;
+using PapisPowerPracticeApi.Repositories.IRepositories;
+
+namespace PapisPowerPracticeApi.Repositories
+{
+    public class WorkoutLogRepository : IWorkoutLogRepository
+    {
+        private readonly AppDbContext _dbContext;
+
+        public WorkoutLogRepository(AppDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public async Task<int> AddWorkoutLogAsync(WorkoutLog workoutlog)
+        {
+            _dbContext.WorkoutLogs.Add(workoutlog);
+            await _dbContext.SaveChangesAsync();
+
+            return workoutlog.Id;
+        }
+
+        public async Task<bool> DeleteWorkoutLogAsync(int id)
+        {
+            var rowsAffected = await _dbContext.WorkoutLogs.Where(w => w.Id == id).ExecuteDeleteAsync();
+
+            if (rowsAffected > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<List<WorkoutLog>> GetAllWorkoutLogsAsync()
+        {
+            var workouts = await _dbContext.WorkoutLogs.ToListAsync();
+
+            return workouts;
+        }
+
+        public async Task<WorkoutLog> GetWorkoutLogByIdAsync(int id)
+        {
+            var workout = await _dbContext.WorkoutLogs.FirstOrDefaultAsync(w => w.Id == id);
+
+            return workout;
+        }
+
+        public async Task<bool> UpdateWorkoutLogAsync(WorkoutLog workoutlog)
+        {
+            _dbContext.WorkoutLogs.Update(workoutlog);
+            var result = await _dbContext.SaveChangesAsync();
+
+            return result > 0;
+        }
+    }
+}
