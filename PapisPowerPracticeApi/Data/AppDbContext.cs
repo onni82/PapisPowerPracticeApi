@@ -14,7 +14,6 @@ namespace PapisPowerPracticeApi.Data
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<WorkoutExercise> WorkoutExercises { get; set; }
         public DbSet<MuscleGroup> MuscleGroups { get; set; }
-        /*public DbSet<ChatMsg> ChatMsgs { get; set; }*/
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
