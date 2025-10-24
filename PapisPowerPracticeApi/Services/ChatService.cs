@@ -26,18 +26,18 @@ namespace PapisPowerPracticeApi.Services
             _chatClient = _azureClient.GetChatClient("my-gpt-4o-mini-deployment");
         }
 
-        public async Task<string> GetAiResponseAsync(string userId, string message)
-        {
-            return "";
-        }
+        //public async Task<string> GetAiResponseAsync(string userId, string message)
+        //{
+        //    return "";
+        //}
 
-        public async Task<IEnumerable<ChatMsg>> GetChatHistoryAsync(string userId, int limit = 20)
-        {
-            return await _context.ChatMsgs
-                .Where(m => m.UserId == userId)
-                .OrderByDescending(m => m.Timestamp)
-                .Take(limit)
-                .ToListAsync();
-        }
+        //public async Task<IEnumerable<ChatMsg>> GetChatHistoryAsync(string userId, int limit = 20)
+        //{
+        //    return await _context.ChatMsgs
+        //        .Where(m => m.UserId == userId)
+        //        .OrderByDescending(m => m.Timestamp)
+        //        .Take(limit)
+        //        .ToListAsync();
+        //}
     }
 }
