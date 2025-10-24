@@ -6,7 +6,6 @@ using OpenAI.Chat;
 using PapisPowerPracticeApi.Data;
 using PapisPowerPracticeApi.Models;
 using PapisPowerPracticeApi.Services.IServices;
-using ChatMessage = PapisPowerPracticeApi.Models.ChatMessage;
 
 namespace PapisPowerPracticeApi.Services
 {
@@ -32,9 +31,9 @@ namespace PapisPowerPracticeApi.Services
             return "";
         }
 
-        public async Task<IEnumerable<ChatMessage>> GetChatHistoryAsync(string userId, int limit = 20)
+        public async Task<IEnumerable<ChatMsg>> GetChatHistoryAsync(string userId, int limit = 20)
         {
-            return await _context.ChatMessages
+            return await _context.ChatMsgs
                 .Where(m => m.UserId == userId)
                 .OrderByDescending(m => m.Timestamp)
                 .Take(limit)
