@@ -47,6 +47,8 @@ namespace PapisPowerPracticeApi.Controllers
         public async Task<ActionResult<GetWorkoutLogDTO>> GetWorkoutLogById(int id)
         {
             var workoutLog = await _workoutLogService.GetWorkoutLogByIdAsync(id);
+            if (workoutLog == null)
+                return NotFound();
             return Ok(workoutLog);
         }
 
