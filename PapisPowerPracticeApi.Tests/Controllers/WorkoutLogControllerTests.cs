@@ -39,5 +39,22 @@ namespace PapisPowerPracticeApi.Tests.Controllers
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             Assert.Equal(workoutLogs, okResult.Value);
         }
+        
+        [Fact]
+        public async Task GetWorkoutLogById_ReturnsOk_WhenFound()
+        {
+            // Arrange
+            var workoutLog = new GetWorkoutLogDTO { Id = 1, StartTime = DateTime.Now, EndTime = DateTime.Now, Notes = "Test 1"};
+
+            _serviceMock.Setup(service => service.GetWorkoutLogByIdAsync(1)).ReturnsAsync(workoutLog);
+
+            // Act
+            var result = await _controller.GetWorkoutLogById(1);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var dto = Assert.IsType<GetWorkoutLogDTO>(okResult.Value);
+            Assert.Equal("Test 1", dto.Notes);
+        }
     }
 }
