@@ -114,5 +114,17 @@ namespace PapisPowerPracticeApi.Tests.Controllers
             // Assert
             Assert.IsType<NoContentResult>(result);
         }
+        [Fact]
+        public async Task DeleteWorkoutLog_ReturnsNotFound_WhenMissing()
+        {
+            // Arrange
+            _serviceMock.Setup(s => s.DeleteWorkoutLogAsync(1)).ReturnsAsync(false);
+
+            // Act
+            var result = await _controller.DeleteWorkoutLog(1);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(result);
+        }
     }
 }
