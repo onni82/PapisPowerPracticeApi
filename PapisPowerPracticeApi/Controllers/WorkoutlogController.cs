@@ -60,10 +60,12 @@ namespace PapisPowerPracticeApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<GetWorkoutLogDTO>> DeleteWorkoutLog(int id)
+        public async Task<ActionResult> DeleteWorkoutLog(int id)
         {
-            var workoutLog = await _workoutLogService.DeleteWorkoutLogAsync(id);
-            return Ok(workoutLog);
+            var deleted = await _workoutLogService.DeleteWorkoutLogAsync(id);
+            if (!deleted)
+                return NotFound();
+            return NoContent();
         }
     }
 }
