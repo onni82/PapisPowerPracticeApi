@@ -14,8 +14,10 @@ namespace PapisPowerPracticeApi.Data
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<WorkoutExercise> WorkoutExercises { get; set; }
         public DbSet<MuscleGroup> MuscleGroups { get; set; }
+        public DbSet<ChatSession> ChatSessions { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
@@ -24,6 +26,16 @@ namespace PapisPowerPracticeApi.Data
                 .HasMany(e => e.MuscleGroups)
                 .WithMany(m => m.Exercises)
                 .UsingEntity(j => j.ToTable("ExerciseMuscleGroups"));
-		}
+
+            builder.Entity<ChatSession>().HasKey(s => s.Id);
+            builder.Entity<ChatMessage>().HasKey(m => m.Id);
+
+            builder
+                .Entity<ChatSession>()
+                .HasMany(s => s.Messages)
+                .WithOne(m => m.ChatSession)
+                .HasForeignKey(m => m.ChatSessionId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }
