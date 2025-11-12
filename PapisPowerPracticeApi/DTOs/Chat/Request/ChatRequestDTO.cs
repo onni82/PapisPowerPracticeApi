@@ -1,4 +1,4 @@
-namespace PapisPowerPracticeApi.DTOs
+namespace PapisPowerPracticeApi.DTOs.Chat.Request
 {
     public class ChatRequestDTO
     {
