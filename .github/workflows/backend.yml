@@ -1,0 +1,79 @@
+name : Backend CI/CD
+
+permissions:
+  contents: read
+  checks: write
+
+on:
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'PapisPowerPracticeApi/**'
+      - 'PapisPowerPracticeApi.Tests/**'
+  push:
+    branches: [ master ]
+    paths:
+      -  'PapisPowerPracticeApi/**'
+
+jobs:
+  test:
+    if: github.event_name == 'pull_request'
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore PapisPowerPracticeApi.sln
+
+      - name: Build
+        run: dotnet build PapisPowerPracticeApi.sln --no-restore --configuration Release
+
+      - name: Run Tests
+        run: | 
+            dotnet test PapisPowerPracticeApi.Tests/PapisPowerPracticeApi.Tests.csproj `
+            --no-build `
+            --configuration Release `
+            --logger "trx;LogFileName=test-results.trx" `
+            --results-directory ${{ env.DOTNET_ROOT }}/TestResults || true
+
+      - name: Upload Test Results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+         name: "Backend API tests"
+         path: D:/a/TestResults/test-results.trx
+         reporter: dotnet-trx
+
+  deploy:
+    if: github.event_name == 'push'
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore PapisPowerPracticeApi.sln
+
+      - name: Publish Backend
+        run: dotnet publish PapisPowerPracticeApi.sln -c Release -o ${{env.DOTNET_ROOT}}/publish
+
+      - name: Create ZIP package
+        run: Compress-Archive -Path ${{env.DOTNET_ROOT}}/publish/* -DestinationPath ${{env.DOTNET_ROOT}}/publish.zip
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B6AC633E4D3A49FFAB90B8B72AC17725 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_AEBEE17CFDC74BEAA32EA272290E31C4 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_BC101D25D0F24500A39B1E5908AED217 }}
+
+      - name: Deploy to Azure
+        run: az webapp deployment source config-zip --name PapisPowerPracticeApis --src ${{env.DOTNET_ROOT}}/publish.zip
