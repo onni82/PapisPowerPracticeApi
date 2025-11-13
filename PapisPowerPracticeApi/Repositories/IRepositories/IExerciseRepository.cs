@@ -6,6 +6,7 @@ namespace PapisPowerPracticeApi.Repositories.Interfaces
     {
         Task<IEnumerable<Exercise>> GetAllAsync();
         Task<Exercise?> GetByIdAsync(int id);
+        Task<Exercise?> GetByNameAsync(string name);
         Task AddAsync(Exercise exercise);
         Task UpdateAsync(Exercise exercise);
         Task DeleteAsync(Exercise exercise);

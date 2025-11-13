@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PapisPowerPracticeApi.Migrations
 {
     /// <inheritdoc />
-    public partial class removeChatMsg : Migration
+    public partial class newmigs : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

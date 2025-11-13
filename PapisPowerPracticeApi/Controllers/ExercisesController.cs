@@ -67,6 +67,8 @@ namespace PapisPowerPracticeApi.Controllers
                 MuscleGroups = dto.MuscleGroupIds.Select(id => new MuscleGroup { Id = id }).ToList()
             };
 
+
+
             var created = await _service.CreateExerciseAsync(exercise);
 
             var result = new ExerciseDTO
