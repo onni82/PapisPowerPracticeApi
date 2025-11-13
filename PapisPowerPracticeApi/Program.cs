@@ -85,7 +85,6 @@ namespace PapisPowerPracticeApi
                 await DbInitializer.SeedRolesAsync(roleManager);
             }
             app.UseHttpsRedirection();
-
             app.UseAuthentication();
             app.UseAuthorization();
 

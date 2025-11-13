@@ -28,6 +28,12 @@ namespace PapisPowerPracticeApi.Repositories
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
+        public async Task<Exercise?> GetByNameAsync(string name)
+        {
+            return await _context.Exercises
+                .FirstOrDefaultAsync(e => e.Name.ToLower() == name.ToLower());
+        }
+
         public async Task AddAsync(Exercise exercise)
         {
             await _context.Exercises.AddAsync(exercise);

@@ -1,4 +1,4 @@
-﻿namespace PapisPowerPracticeApi.Models
+﻿    namespace PapisPowerPracticeApi.Models
 {
     public class Exercise
     {
