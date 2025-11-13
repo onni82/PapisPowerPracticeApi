@@ -44,7 +44,7 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
          name: "Backend API tests"
-         path: D:/a/TestResults/test-results.trx
+         path: ${{ env.DOTNET_ROOT }}/TestResults/test-results.trx
          reporter: dotnet-trx
 
   deploy:
