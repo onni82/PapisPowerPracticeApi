@@ -29,6 +29,11 @@ namespace PapisPowerPracticeApi.Services
 
         public async Task<Exercise> CreateExerciseAsync(Exercise exercise)
         {
+            var existing = await _repository.GetByNameAsync(exercise.Name);
+            if(existing != null)
+            {
+                throw new ArgumentException($"Exercise with name '{exercise.Name}' already exist");
+            }
             var muscleGroups = new List<MuscleGroup>();
 
             foreach (var mg in exercise.MuscleGroups)
@@ -46,6 +51,7 @@ namespace PapisPowerPracticeApi.Services
             }
 
             exercise.MuscleGroups = muscleGroups;
+
 
             await _repository.AddAsync(exercise);
             await _repository.SaveChangesAsync();
