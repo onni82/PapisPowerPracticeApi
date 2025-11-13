@@ -57,6 +57,7 @@ namespace PapisPowerPracticeApi
             builder.Services.AddScoped<IExerciseService, ExerciseService>();
             builder.Services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
             builder.Services.AddScoped<IMuscleGroupService, MuscleGroupService>();
+            builder.Services.AddScoped<IChatBotService, ChatBotService>();
             builder.Services.AddScoped<ICalorieCalculatorService, CalorieCalculatorService>();
             builder.Services.AddScoped<IWorkoutLogRepository, WorkoutLogRepository>();
             builder.Services.AddScoped<IWorkoutLogService, WorkoutLogService>();
