@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PapisPowerPracticeApi", "Pa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PapisPowerPracticeApi.Tests", "PapisPowerPracticeApi.Tests\PapisPowerPracticeApi.Tests.csproj", "{CFB03C95-17AB-9FE5-C07C-078B87A47F32}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PapisPowerPracticeApi.test", "PapisPowerPracticeApi.test\PapisPowerPracticeApi.test.csproj", "{A6556F6C-BBAD-4B0E-9B6B-021E32E7C5F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CFB03C95-17AB-9FE5-C07C-078B87A47F32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFB03C95-17AB-9FE5-C07C-078B87A47F32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFB03C95-17AB-9FE5-C07C-078B87A47F32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6556F6C-BBAD-4B0E-9B6B-021E32E7C5F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6556F6C-BBAD-4B0E-9B6B-021E32E7C5F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6556F6C-BBAD-4B0E-9B6B-021E32E7C5F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6556F6C-BBAD-4B0E-9B6B-021E32E7C5F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
