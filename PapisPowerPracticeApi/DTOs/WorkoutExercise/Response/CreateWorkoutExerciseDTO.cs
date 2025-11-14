@@ -1,6 +1,6 @@
 ﻿namespace PapisPowerPracticeApi.DTOs.WorkoutExercise.Response
 {
-    public interface CreateWorkoutExerciseDTO
+    public class CreateWorkoutExerciseDTO
     {
         public int WorkoutLogId { get; set; }
         public int ExerciseId { get; set; }
