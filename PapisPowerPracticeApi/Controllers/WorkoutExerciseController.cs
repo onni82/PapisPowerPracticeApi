@@ -32,10 +32,14 @@ namespace PapisPowerPracticeApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<WorkoutExerciseDTO>> DeleteWorkoutExercise(int id)
+        public async Task<IActionResult> DeleteWorkoutExercise(int id)
         {
             var workout = await _workoutService.DeleteWorkoutExerciseAsync(id);
-            return Ok(workout);
+            if (!workout)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
     }
 }
