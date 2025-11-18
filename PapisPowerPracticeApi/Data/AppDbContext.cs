@@ -15,7 +15,7 @@ namespace PapisPowerPracticeApi.Data
         public DbSet<WorkoutExercise> WorkoutExercises { get; set; }
         public DbSet<MuscleGroup> MuscleGroups { get; set; }
         public DbSet<ChatSession> ChatSessions { get; set; }
-        public DbSet<ChatMessage> ChatMessages { get; set; }
+        public DbSet<ChatMsg> ChatMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -32,7 +32,7 @@ namespace PapisPowerPracticeApi.Data
                 b.Property(s => s.CreatedAt).IsRequired();
             });
 
-            builder.Entity<ChatMessage>(b =>
+            builder.Entity<ChatMsg>(b =>
             {
                 b.HasKey(m => m.Id);
                 b.Property(m => m.Message).IsRequired();

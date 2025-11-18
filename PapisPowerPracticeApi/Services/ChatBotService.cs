@@ -26,7 +26,7 @@ namespace PapisPowerPracticeApi.Services
             _context = context;
         }
 
-        public async Task<ChatMessageDTO> SendMessageAsync(string userId, ChatRequestDTO request)
+        public async Task<ChatMsgDTO> SendMessageAsync(string userId, ChatRequestDTO request)
         {
             if (string.IsNullOrWhiteSpace(userId))
             {

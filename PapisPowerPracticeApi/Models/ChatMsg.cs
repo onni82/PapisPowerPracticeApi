@@ -1,6 +1,6 @@
 ﻿namespace PapisPowerPracticeApi.Models
 {
-    public class ChatMessage
+    public class ChatMsg
     {
         public int Id { get; set; }
         public string UserId { get; set; } = null!;

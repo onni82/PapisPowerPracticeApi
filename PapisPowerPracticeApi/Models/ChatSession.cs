@@ -6,6 +6,6 @@
         public string UserId { get; set; } = null!;
         public string Title { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
-        public ICollection<ChatMessage> Messages { get; set; } = new List<ChatMessage>();
+        public ICollection<ChatMsg> Messages { get; set; } = new List<ChatMsg>();
     }
 }

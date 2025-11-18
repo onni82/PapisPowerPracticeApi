@@ -1,6 +1,6 @@
 ﻿namespace PapisPowerPracticeApi.DTOs.Chat.Response
 {
-    public class ChatMessageDTO
+    public class ChatMsgDTO
     {
         public int Id { get; set; }
         public Guid ChatSessionId { get; set; }
