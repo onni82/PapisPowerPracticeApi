@@ -22,22 +22,24 @@ namespace PapisPowerPracticeApi.Services
             _context = context;
 		}
 
-        public async Task<string> GetResponseAsync(string message)
-        {
-            try
-            {
-                var chatClient = _openAIClient.GetChatClient(_deploymentName);
-                var response = await chatClient.CompleteChatAsync(new[]
-                {
-                    new UserChatMessage(message)
-                });
 
-                return response.Value.Content[0].Text;
-            }
-            catch (Exception ex)
-            {
-                return $"Error: {ex.Message}";
-            }
-        }
+
+        //public async Task<string> GetResponseAsync(string message)
+        //{
+        //    try
+        //    {
+        //        var chatClient = _openAIClient.GetChatClient(_deploymentName);
+        //        var response = await chatClient.CompleteChatAsync(new[]
+        //        {
+        //            new UserChatMessage(message)
+        //        });
+
+        //        return response.Value.Content[0].Text;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return $"Error: {ex.Message}";
+        //    }
+        //}
     }
 }
