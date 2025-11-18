@@ -29,13 +29,6 @@ namespace PapisPowerPracticeApi.Data
 
             builder.Entity<ChatSession>().HasKey(s => s.Id);
             builder.Entity<ChatMessage>().HasKey(m => m.Id);
-
-            builder
-                .Entity<ChatSession>()
-                .HasMany(s => s.Messages)
-                .WithOne(m => m.ChatSession)
-                .HasForeignKey(m => m.ChatSessionId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
