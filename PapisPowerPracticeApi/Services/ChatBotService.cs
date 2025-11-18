@@ -2,6 +2,7 @@ using Azure.AI.OpenAI;
 using Azure;
 using OpenAI.Chat;
 using PapisPowerPracticeApi.Services.IServices;
+using PapisPowerPracticeApi.Data;
 
 namespace PapisPowerPracticeApi.Services
 {
@@ -9,15 +10,17 @@ namespace PapisPowerPracticeApi.Services
     {
         private readonly AzureOpenAIClient _openAIClient;
         private readonly string _deploymentName;
+        private readonly AppDbContext _context;
 
-        public ChatBotService(IConfiguration configuration)
+        public ChatBotService(IConfiguration configuration, AppDbContext context)
         {
             var endpoint = configuration["AzureOpenAI:Endpoint"];
             var apiKey = configuration["AzureOpenAI:ApiKey"];
             _deploymentName = configuration["AzureOpenAI:DeploymentName"];
             
             _openAIClient = new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
-        }
+            _context = context;
+		}
 
         public async Task<string> GetResponseAsync(string message)
         {
