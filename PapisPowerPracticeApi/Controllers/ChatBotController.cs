@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PapisPowerPracticeApi.Services.IServices;
 
@@ -5,6 +6,7 @@ namespace PapisPowerPracticeApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ChatBotController : ControllerBase
     {
         private readonly IChatBotService _chatBotService;
