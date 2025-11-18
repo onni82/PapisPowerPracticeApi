@@ -19,16 +19,32 @@ namespace PapisPowerPracticeApi.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
-
             // Flera-till-flera-relation Exercise med MuscleGroup
             builder.Entity<Exercise>()
                 .HasMany(e => e.MuscleGroups)
                 .WithMany(m => m.Exercises)
                 .UsingEntity(j => j.ToTable("ExerciseMuscleGroups"));
 
-            builder.Entity<ChatSession>().HasKey(s => s.Id);
-            builder.Entity<ChatMessage>().HasKey(m => m.Id);
-        }
+            builder.Entity<ChatSession>(b => {
+                b.HasKey(s => s.Id);
+                b.Property(s => s.Title).IsRequired();
+                b.Property(s => s.UserId).IsRequired();
+                b.Property(s => s.CreatedAt).IsRequired();
+            });
+
+            builder.Entity<ChatMessage>(b =>
+            {
+                b.HasKey(m => m.Id);
+                b.Property(m => m.Message).IsRequired();
+                b.Property(m => m.UserId).IsRequired();
+                b.Property(m => m.Timestamp).IsRequired();
+                b.HasOne(m => m.ChatSession)
+                 .WithMany(s => s.Messages)
+                 .HasForeignKey(m => m.ChatSessionId)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+			base.OnModelCreating(builder);
+		}
     }
 }
