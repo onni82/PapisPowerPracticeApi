@@ -126,6 +126,34 @@ namespace PapisPowerPracticeApi.Services
             }
         }
 
+        public async Task<IEnumerable<ChatMsgDTO>> GetSessionMessagesAsync(Guid sessionId, string userId)
+        {
+            var session = await _context.ChatSessions
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.Id == sessionId && s.UserId == userId);
+
+            if (session == null)
+            {
+                throw new InvalidOperationException("Session not found or does not belong to the user");
+            }
+
+            var messages = await _context.ChatMessages
+                .AsNoTracking()
+                .Where(m => m.ChatSessionId == sessionId)
+                .OrderBy(m => m.Timestamp)
+                .Select(m => new ChatMsgDTO
+                {
+                    Id = m.Id,
+                    ChatSessionId = m.ChatSessionId,
+                    Message = m.Message,
+                    IsUserMessage = m.IsUserMessage,
+                    Timestamp = m.Timestamp
+                })
+                .ToListAsync();
+
+            return messages;
+        }
+
         public async Task<IEnumerable<ChatSessionDTO>> GetUserSessionAsync(string userId)
         {
             var sessions = await _context.ChatSessions
