@@ -126,6 +126,23 @@ namespace PapisPowerPracticeApi.Services
             }
         }
 
+        public async Task<IEnumerable<ChatSessionDTO>> GetUserSessionAsync(string userId)
+        {
+            var sessions = await _context.ChatSessions
+                .AsNoTracking()
+                .Where(s => s.UserId == userId)
+                .OrderByDescending(s => s.CreatedAt)
+                .Select(s => new ChatSessionDTO
+                {
+                    Id = s.Id,
+                    Title = s.Title,
+                    CreatedAt = s.CreatedAt
+                })
+                .ToListAsync();
+
+            return sessions;
+        }
+
         private static string GenerateTitleFromMessage(string message)
         {
             if (string.IsNullOrWhiteSpace(message))
