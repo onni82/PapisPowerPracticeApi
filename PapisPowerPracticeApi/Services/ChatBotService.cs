@@ -51,6 +51,79 @@ namespace PapisPowerPracticeApi.Services
                 };
                 _context.ChatSessions.Add(session);
             }
+
+            // Sparar användarmeddelande
+            var userMessageEntity = new ChatMsg
+            {
+                UserId = userId,
+                Message = request.Message,
+                IsUserMessage = true,
+                Timestamp = DateTime.UtcNow,
+                ChatSessionId = session.Id
+            };
+            _context.ChatMessages.Add(userMessageEntity);
+            await _context.SaveChangesAsync();
+
+            // Bygger konversation (systemefterfrågan + historia)
+            var chatClient = _openAIClient.GetChatClient(_deploymentName);
+
+            // Tar upp tidigare meddelanden för kontext (inkluderar både användar- och assistentmeddelanden, sorterade)
+            var history = await _context.ChatMessages
+                .Where(m => m.ChatSessionId == session.Id)
+                .OrderBy(m => m.Timestamp)
+                .ToListAsync();
+
+            var chatMessages = new List<ChatMessage>
+            {
+                new SystemChatMessage("Du är en personlig träningscoach. Hjälp användaren att skapa en personlig träningsplan baserad på deras mål, erfarenhetsnivå och preferenser. Ställ förtydligande frågor vid behov och ge handlingsbara, progressiva planer (set, repetitioner, vila, återhämtningstips). Håll svaren vänliga och koncisa.")
+            };
+
+            // Konverterar historik till ChatMessage-format
+            foreach (var m in history)
+            {
+                chatMessages.Add(m.IsUserMessage ? new UserChatMessage(m.Message) : new AssistantChatMessage(m.Message));
+            }
+
+            try
+            {
+                var response = await chatClient.CompleteChatAsync(chatMessages.ToArray());
+
+                var assistantText = response.Value.Content[0].Text ?? string.Empty;
+                
+                // Sparar assistentens svar
+                var assistantMessageEntity = new ChatMsg
+                {
+                    UserId = userId,
+                    Message = assistantText,
+                    IsUserMessage = false,
+                    Timestamp = DateTime.UtcNow,
+                    ChatSessionId = session.Id
+                };
+                _context.ChatMessages.Add(assistantMessageEntity);
+                await _context.SaveChangesAsync();
+
+                // Ser till att sessionen kvarstod (i fall den nyss skapades)
+                if (session.CreatedAt == default)
+                {
+                    session.CreatedAt = DateTime.UtcNow;
+                    _context.ChatSessions.Update(session);
+                    await _context.SaveChangesAsync();
+                }
+
+                return new ChatMsgDTO
+                {
+                    Id = assistantMessageEntity.Id,
+                    ChatSessionId = assistantMessageEntity.ChatSessionId,
+                    Message = assistantMessageEntity.Message,
+                    IsUserMessage = assistantMessageEntity.IsUserMessage,
+                    Timestamp = assistantMessageEntity.Timestamp
+                };
+            }
+            catch (Exception ex)
+            {
+                // Logga fel (om nödvändigt)
+                throw new InvalidOperationException($"OpenAI call failed: {ex.Message}", ex);
+            }
         }
 
         private static string GenerateTitleFromMessage(string message)
