@@ -47,7 +47,7 @@ namespace PapisPowerPracticeApi.Services
                     UserId = userId,
                     CreatedAt = DateTime.UtcNow,
                     Title = GenerateTitleFromMessage(request.Message),
-                    Messages = new List<ChatMessage>()
+                    Messages = new List<ChatMsg>()
                 };
                 _context.ChatSessions.Add(session);
             }
