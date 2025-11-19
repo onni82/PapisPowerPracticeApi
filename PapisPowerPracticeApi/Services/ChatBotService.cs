@@ -154,7 +154,7 @@ namespace PapisPowerPracticeApi.Services
             return messages;
         }
 
-        public async Task<IEnumerable<ChatSessionDTO>> GetUserSessionAsync(string userId)
+        public async Task<IEnumerable<ChatSessionDTO>> GetUserSessionsAsync(string userId)
         {
             var sessions = await _context.ChatSessions
                 .AsNoTracking()
