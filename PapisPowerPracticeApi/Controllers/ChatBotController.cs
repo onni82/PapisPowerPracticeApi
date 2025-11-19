@@ -79,6 +79,33 @@ namespace PapisPowerPracticeApi.Controllers
             }
         }
 
+        // GET /api/ChatBot/sessions/{userId}
+        [HttpGet("sessions/{userId}")]
+        public async Task<ActionResult> GetUserSessions(string userId)
+        {
+            var currentUserId = GetUserId();
+            if (currentUserId == null)
+            {
+                return Unauthorized();
+            }
+
+            // Enforce that users can only view their own sessions
+            if (!string.Equals(currentUserId, userId, StringComparison.OrdinalIgnoreCase))
+            {
+                return Forbid();
+            }
+
+            try
+            {
+                var sessions = await _chatBotService.GetUserSessionsAsync(userId);
+                return Ok(sessions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         private string? GetUserId()
         {
             return User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
