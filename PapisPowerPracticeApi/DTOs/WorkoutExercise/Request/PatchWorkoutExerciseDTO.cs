@@ -1,4 +1,4 @@
-﻿namespace PapisPowerPracticeApi.DTOs.WorkoutExercise.Response
+﻿namespace PapisPowerPracticeApi.DTOs.WorkoutExercise.Request
 {
     public class PatchWorkoutExerciseDTO
     {

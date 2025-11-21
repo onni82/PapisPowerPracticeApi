@@ -1,4 +1,5 @@
 ﻿using PapisPowerPracticeApi.DTOs;
+using PapisPowerPracticeApi.DTOs.WorkoutExercise.Response;
 using PapisPowerPracticeApi.DTOs.WorkoutLog;
 using PapisPowerPracticeApi.Models;
 using PapisPowerPracticeApi.Repositories;
@@ -25,6 +26,19 @@ namespace PapisPowerPracticeApi.Services
                 StartTime = r.StartTime,
                 EndTime = r.EndTime,
                 Notes = r.Notes,
+                Exercises = r.Exercises.Select(e => new WorkoutExerciseDTO
+                {
+                    Id = e.Id,
+                    ExerciseId = e.ExerciseId,
+                    Name = e.Exercise.Name,
+                    Sets = e.Sets.Select(s => new WorkoutSetDTO
+                    {
+                        Id = s.Id,
+                        Reps = s.Reps,
+                        Weight = s.Weight,
+                        IsWarmup = s.IsWarmup
+                    }).ToList()
+                }).ToList()
             }).ToList();
             return getWorkoutLogDTO;
         }
@@ -41,6 +55,19 @@ namespace PapisPowerPracticeApi.Services
              StartTime = workoutLog.StartTime,
              EndTime = workoutLog.EndTime,
              Notes = workoutLog.Notes,
+             Exercises = workoutLog.Exercises.Select(e => new WorkoutExerciseDTO
+             {
+                 Id = e.Id,
+                 ExerciseId = e.ExerciseId,
+                 Name = e.Exercise.Name,
+                 Sets = e.Sets.Select(s => new WorkoutSetDTO
+                 {
+                     Id = s.Id,
+                     Reps = s.Reps,
+                     Weight = s.Weight,
+                     IsWarmup = s.IsWarmup
+                 }).ToList()
+             }).ToList()
             };
             return getworkoutLogDTO;
         }
@@ -51,8 +78,24 @@ namespace PapisPowerPracticeApi.Services
                 StartTime = createworkoutLogDTO.StartTime,
                 EndTime = createworkoutLogDTO.EndTime,
                 Notes = createworkoutLogDTO.Notes,
-                UserId = userId
+                UserId = userId,
+                Exercises = new List<WorkoutExercise>()
             };
+
+            foreach(var ex in createworkoutLogDTO.Exercises)
+            {
+                var workoutExercise = new WorkoutExercise
+                {
+                    ExerciseId = ex.ExerciseId,
+                    Sets = ex.Sets.Select(s => new WorkoutSet
+                    {
+                        Reps = s.Reps,
+                        Weight = s.Weight,
+                        IsWarmup = s.IsWarmup
+                    }).ToList()
+                };
+                workoutLog.Exercises.Add(workoutExercise);
+            }
             var addedWorkoutLog = await _workoutLogRepository.AddWorkoutLogAsync(workoutLog);
             return addedWorkoutLog;
         }

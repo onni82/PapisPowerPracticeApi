@@ -24,27 +24,37 @@ namespace PapisPowerPracticeApi.Repositories
 
         public async Task<bool> DeleteWorkoutExerciseAsync(int id)
         {
-            var rowsAffected = await _dbContext.WorkoutExercises.Where(w => w.Id == id).ExecuteDeleteAsync();
+            var rowsAffected = await _dbContext.WorkoutExercises
+                .Include(w => w.Sets)
+                .FirstOrDefaultAsync(w => w.Id == id);
+                
 
-            if(rowsAffected > 0)
+            if(rowsAffected == null)
             {
-                return true;
+                return false;
             }
-            return false;
+
+            _dbContext.WorkoutExercises.Remove(rowsAffected);
+
+            return true;
         }
 
         public async Task<List<WorkoutExercise>> GetAllWorkoutExercisesAsync()
         {
-            var workouts = await _dbContext.WorkoutExercises.ToListAsync();
+            var workouts = await _dbContext.WorkoutExercises
+                .Include(w => w.Sets)
+                .Include(w => w.Exercise)
+                .ToListAsync();
 
             return workouts;
         }
 
-        public async Task<WorkoutExercise> GetWorkoutExerciseByIdAsync(int id)
+        public async Task<WorkoutExercise?> GetWorkoutExerciseByIdAsync(int id)
         {
-            var workout = await _dbContext.WorkoutExercises.FirstOrDefaultAsync(w => w.Id == id);
-
-            return workout;
+            return await _dbContext.WorkoutExercises
+                .Include(w => w.Sets)
+                .Include(w => w.Exercise)
+                .FirstOrDefaultAsync(w => w.Id == id);
         }
 
         public async Task<bool> UpdateWorkoutExerciseAsync(WorkoutExercise exercise)

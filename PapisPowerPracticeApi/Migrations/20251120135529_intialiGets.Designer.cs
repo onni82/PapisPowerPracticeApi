@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PapisPowerPracticeApi.Data;
 
@@ -11,9 +12,11 @@ using PapisPowerPracticeApi.Data;
 namespace PapisPowerPracticeApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251120135529_intialiGets")]
+    partial class intialiGets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -297,6 +300,9 @@ namespace PapisPowerPracticeApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ExcerciseId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ExerciseId")
                         .HasColumnType("int");
 
@@ -353,7 +359,7 @@ namespace PapisPowerPracticeApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsWarmup")
+                    b.Property<bool>("IsWarmUp")
                         .HasColumnType("bit");
 
                     b.Property<int>("Reps")
@@ -461,7 +467,7 @@ namespace PapisPowerPracticeApi.Migrations
                         .IsRequired();
 
                     b.HasOne("PapisPowerPracticeApi.Models.WorkoutLog", "WorkoutLog")
-                        .WithMany("Exercises")
+                        .WithMany("WorkoutExercises")
                         .HasForeignKey("WorkoutLogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -504,7 +510,7 @@ namespace PapisPowerPracticeApi.Migrations
 
             modelBuilder.Entity("PapisPowerPracticeApi.Models.WorkoutLog", b =>
                 {
-                    b.Navigation("Exercises");
+                    b.Navigation("WorkoutExercises");
                 });
 
             modelBuilder.Entity("PapisPowerPracticeApi.Models.ApplicationUser", b =>
