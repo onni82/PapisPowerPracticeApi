@@ -54,34 +54,9 @@ namespace PapisPowerPracticeApi.Controllers
             }
         }
 
-        // GET /api/ChatBot/{sessionId}
-        [HttpGet("{sessionId:guid}")]
-        public async Task<ActionResult> GetSessionMessages(Guid sessionId)
-        {
-            var userId = GetUserId();
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            try
-            {
-                var messages = await _chatBotService.GetSessionMessagesAsync(sessionId, userId);
-                return Ok(messages);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-
-        // GET /api/ChatBot/sessions/{userId}
-        [HttpGet("sessions/{userId}")]
-        public async Task<ActionResult> GetUserSessions(string userId)
+        // GET /api/ChatBot/messages/{userId}
+        [HttpGet("messages/{userId}")]
+        public async Task<ActionResult> GetUserMessages(string userId)
         {
             var currentUserId = GetUserId();
             if (currentUserId == null)
@@ -89,7 +64,6 @@ namespace PapisPowerPracticeApi.Controllers
                 return Unauthorized();
             }
 
-            // Enforce that users can only view their own sessions
             if (!string.Equals(currentUserId, userId, StringComparison.OrdinalIgnoreCase))
             {
                 return Forbid();
@@ -97,8 +71,8 @@ namespace PapisPowerPracticeApi.Controllers
 
             try
             {
-                var sessions = await _chatBotService.GetUserSessionsAsync(userId);
-                return Ok(sessions);
+                var messages = await _chatBotService.GetUserMessagesAsync(userId);
+                return Ok(messages);
             }
             catch (Exception ex)
             {

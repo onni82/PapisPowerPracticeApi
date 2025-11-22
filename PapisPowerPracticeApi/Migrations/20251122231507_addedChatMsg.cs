@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PapisPowerPracticeApi.Migrations
 {
     /// <inheritdoc />
-    public partial class addChatModels : Migration
+    public partial class addedChatMsg : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,17 +54,19 @@ namespace PapisPowerPracticeApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChatSessions",
+                name: "ChatMessages",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsUserMessage = table.Column<bool>(type: "bit", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChatSessions", x => x.Id);
+                    table.PrimaryKey("PK_ChatMessages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -231,29 +233,6 @@ namespace PapisPowerPracticeApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChatMessages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsUserMessage = table.Column<bool>(type: "bit", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ChatSessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ChatMessages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ChatMessages_ChatSessions_ChatSessionId",
-                        column: x => x.ChatSessionId,
-                        principalTable: "ChatSessions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ExerciseMuscleGroups",
                 columns: table => new
                 {
@@ -347,11 +326,6 @@ namespace PapisPowerPracticeApi.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatMessages_ChatSessionId",
-                table: "ChatMessages",
-                column: "ChatSessionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ExerciseMuscleGroups_MuscleGroupsId",
                 table: "ExerciseMuscleGroups",
                 column: "MuscleGroupsId");
@@ -406,9 +380,6 @@ namespace PapisPowerPracticeApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "ChatSessions");
 
             migrationBuilder.DropTable(
                 name: "MuscleGroups");

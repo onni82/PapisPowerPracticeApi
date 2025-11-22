@@ -12,8 +12,8 @@ using PapisPowerPracticeApi.Data;
 namespace PapisPowerPracticeApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251119141213_addChatModels")]
-    partial class addChatModels
+    [Migration("20251122231507_addedChatMsg")]
+    partial class addedChatMsg
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -255,9 +255,6 @@ namespace PapisPowerPracticeApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("ChatSessionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsUserMessage")
                         .HasColumnType("bit");
 
@@ -274,31 +271,7 @@ namespace PapisPowerPracticeApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatSessionId");
-
                     b.ToTable("ChatMessages");
-                });
-
-            modelBuilder.Entity("PapisPowerPracticeApi.Models.ChatSession", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ChatSessions");
                 });
 
             modelBuilder.Entity("PapisPowerPracticeApi.Models.Exercise", b =>
@@ -494,17 +467,6 @@ namespace PapisPowerPracticeApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PapisPowerPracticeApi.Models.ChatMsg", b =>
-                {
-                    b.HasOne("PapisPowerPracticeApi.Models.ChatSession", "ChatSession")
-                        .WithMany("Messages")
-                        .HasForeignKey("ChatSessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ChatSession");
-                });
-
             modelBuilder.Entity("PapisPowerPracticeApi.Models.WorkoutExercise", b =>
                 {
                     b.HasOne("PapisPowerPracticeApi.Models.Exercise", "Exercise")
@@ -537,11 +499,6 @@ namespace PapisPowerPracticeApi.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PapisPowerPracticeApi.Models.ChatSession", b =>
-                {
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("PapisPowerPracticeApi.Models.WorkoutLog", b =>
