@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PapisPowerPracticeApi.Migrations
 {
     /// <inheritdoc />
-    public partial class newmigs : Migration
+    public partial class chatMsg : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,6 +51,22 @@ namespace PapisPowerPracticeApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChatMessages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsUserMessage = table.Column<bool>(type: "bit", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatMessages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -247,11 +263,7 @@ namespace PapisPowerPracticeApi.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     WorkoutLogId = table.Column<int>(type: "int", nullable: false),
-                    ExcerciseId = table.Column<int>(type: "int", nullable: false),
-                    ExerciseId = table.Column<int>(type: "int", nullable: false),
-                    Sets = table.Column<int>(type: "int", nullable: false),
-                    Reps = table.Column<int>(type: "int", nullable: false),
-                    Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    ExerciseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -266,6 +278,28 @@ namespace PapisPowerPracticeApi.Migrations
                         name: "FK_WorkoutExercises_WorkoutLogs_WorkoutLogId",
                         column: x => x.WorkoutLogId,
                         principalTable: "WorkoutLogs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WorkoutSet",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    WorkoutExerciseId = table.Column<int>(type: "int", nullable: false),
+                    Reps = table.Column<int>(type: "int", nullable: false),
+                    Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsWarmup = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkoutSet", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkoutSet_WorkoutExercises_WorkoutExerciseId",
+                        column: x => x.WorkoutExerciseId,
+                        principalTable: "WorkoutExercises",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -333,6 +367,11 @@ namespace PapisPowerPracticeApi.Migrations
                 name: "IX_WorkoutLogs_UserId",
                 table: "WorkoutLogs",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkoutSet_WorkoutExerciseId",
+                table: "WorkoutSet",
+                column: "WorkoutExerciseId");
         }
 
         /// <inheritdoc />
@@ -354,16 +393,22 @@ namespace PapisPowerPracticeApi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ChatMessages");
+
+            migrationBuilder.DropTable(
                 name: "ExerciseMuscleGroups");
 
             migrationBuilder.DropTable(
-                name: "WorkoutExercises");
+                name: "WorkoutSet");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "MuscleGroups");
+
+            migrationBuilder.DropTable(
+                name: "WorkoutExercises");
 
             migrationBuilder.DropTable(
                 name: "Exercises");
