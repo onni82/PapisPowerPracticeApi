@@ -15,11 +15,11 @@ using System.Threading.Tasks;
 
 namespace PapisPowerPracticeApi.test.Controller
 {
-    public class PapisPowerPracticeControllerTest
+    public class WorkoutExerciseControllerTest
     {
         private readonly IWorkoutExerciseService _workOutService;
         private readonly WorkoutExerciseController _controller;
-        public PapisPowerPracticeControllerTest()
+        public WorkoutExerciseControllerTest()
         {
             _workOutService = A.Fake<IWorkoutExerciseService>();
             _controller = new WorkoutExerciseController(_workOutService);
