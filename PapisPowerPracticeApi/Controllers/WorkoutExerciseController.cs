@@ -28,6 +28,10 @@ namespace PapisPowerPracticeApi.Controllers
         public async Task<ActionResult<WorkoutExerciseDTO>> GetWorkoutExerciseById(int id)
         {
             var workout = await _workoutService.GetWorkoutExerciseByIdAsync(id);
+            if(workout == null)
+            {
+                return NotFound();
+            }
             return Ok(workout);
         }
 
