@@ -18,12 +18,12 @@ namespace PapisPowerPracticeApi.Controllers
         {
             _workoutService = workoutService;
         }
-        [HttpPost]
-        public async Task<IActionResult> CreateWorkoutExercise(CreateWorkoutExerciseDTO exerciseDTO)
-        {
-            var workout = await _workoutService.CreateWorkoutExerciseAsync(exerciseDTO);
-            return Ok(workout);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> CreateWorkoutExercise(CreateWorkoutExerciseDTO exerciseDTO)
+        //{
+        //    var workout = await _workoutService.CreateWorkoutExerciseAsync(exerciseDTO);
+        //    return Ok(workout);
+        //}
         [HttpGet("{id}")]
         public async Task<ActionResult<WorkoutExerciseDTO>> GetWorkoutExerciseById(int id)
         {
