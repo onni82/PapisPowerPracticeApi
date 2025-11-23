@@ -31,13 +31,6 @@ namespace PapisPowerPracticeApi.Controllers
             return Ok(workout);
         }
 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateWorkoutExercise(int id,[FromBody]PatchWorkoutExerciseDTO exerciseDTO)
-        {
-            var workout = await _workoutService.UpdateWorkoutExerciseAsync(id, exerciseDTO);
-            return Ok(workout);
-        }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWorkoutExercise(int id)
         {
