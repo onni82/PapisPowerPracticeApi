@@ -15,37 +15,44 @@ namespace PapisPowerPracticeApi.Services
             _exerciseRepository = exerciseRepository;
         }
 
-        public async Task<WorkoutExerciseDTO> GetWorkoutExerciseByIdAsync(int id)
+        public async Task<WorkoutExerciseDTO?> GetWorkoutExerciseByIdAsync(int id)
         {
             var workout = await _exerciseRepository.GetWorkoutExerciseByIdAsync(id);
             if(workout == null)
             {
                 return null;
             }
-            var workoutDTO = new WorkoutExerciseDTO
+            return new WorkoutExerciseDTO
             {
                 Id = workout.Id,
                 ExerciseId = workout.Exercise.Id,
                 Name = workout.Exercise.Name,
-                Sets = workout.Sets,
-                Reps = workout.Reps,
-                Weight = workout.Weight
+                Sets = workout.Sets.Select(s => new WorkoutSetDTO
+                {
+                    Id = s.Id,
+                    Reps = s.Reps,
+                    Weight = s.Weight,
+                    IsWarmup = s.IsWarmup
+                }).ToList()
 
             };
-            return workoutDTO;
         }
-        public async Task<int> CreateWorkoutExerciseAsync(CreateWorkoutExerciseDTO createWorkout)
-        {
-            var workout = new WorkoutExercise
-            {
-                Sets = createWorkout.Sets,
-                Reps = createWorkout.Reps,
-                Weight = createWorkout.Weight
-            };
+        //public async Task<int> CreateWorkoutExerciseAsync(CreateWorkoutExerciseDTO createWorkout)
+        //{
+        //    var workout = new WorkoutExercise
+        //    {
+        //        ExerciseId = createWorkout.ExerciseId,
+        //        Sets = createWorkout.Sets.Select(s => new WorkoutSet
+        //        {
+        //            Reps = s.Reps,
+        //            Weight = s.Weight,
+        //            IsWarmup = s.IsWarmup
+        //        }).ToList()
+        //    };
 
-            var newWorkout = await _exerciseRepository.AddWorkoutExerciseAsync(workout);
-            return newWorkout;
-        }
+        //    return await _exerciseRepository.AddWorkoutExerciseAsync(workout);
+            
+        //}
 
         public Task<bool> DeleteWorkoutExerciseAsync(int id)
         {
@@ -53,32 +60,6 @@ namespace PapisPowerPracticeApi.Services
             return deleteWorkout;
         }
 
-        public async Task<bool> UpdateWorkoutExerciseAsync(int id, PatchWorkoutExerciseDTO patchWorkout)
-        {
-            var workout = await _exerciseRepository.GetWorkoutExerciseByIdAsync(id);
-            if(workout == null)
-            {
-                return false;
-            }
-            if(patchWorkout.ExerciseId.HasValue)
-            {
-                workout.ExcerciseId = patchWorkout.ExerciseId.Value;
-            }
-            if (patchWorkout.Sets.HasValue)
-            {
-                workout.Sets = patchWorkout.Sets.Value;
-            }
-            if (patchWorkout.Reps.HasValue)
-            {
-                workout.Reps = patchWorkout.Reps.Value;
-            }
-            if (patchWorkout.Weight.HasValue)
-            {
-                workout.Weight = patchWorkout.Weight.Value;
-            }
-
-            return await _exerciseRepository.UpdateWorkoutExerciseAsync(workout);
-
-        }
+        
     }
 }

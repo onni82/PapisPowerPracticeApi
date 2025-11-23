@@ -15,6 +15,6 @@ namespace PapisPowerPracticeApi.Models
         public IdentityUser User { get; set; } = null!;
 
         // En workoutlog kan ha flera övningar
-        public ICollection<WorkoutExercise> WorkoutExercises { get; set; } = new List<WorkoutExercise>();
+        public ICollection<WorkoutExercise> Exercises { get; set; } = new List<WorkoutExercise>();
     }
 }
