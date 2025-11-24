@@ -1,0 +1,96 @@
+name : Backend CI/CD
+
+permissions:
+  contents: read
+  checks: write
+
+on:
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'PapisPowerPracticeApi/**'
+      - 'PapisPowerPracticeApi.Tests/**'
+  push:
+    branches: [ master ]
+    paths:
+      -  'PapisPowerPracticeApi/**'
+
+jobs:
+  test:
+    if: github.event_name == 'pull_request'
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore PapisPowerPracticeApi.sln
+
+      - name: Build
+        run: dotnet build PapisPowerPracticeApi.sln --no-restore --configuration Release
+
+      - name: Run Tests
+        run: | 
+            dotnet test PapisPowerPracticeApi.Tests/PapisPowerPracticeApi.Tests.csproj `
+            --no-build `
+            --configuration Release `
+            --logger "trx;LogFileName=test-results.trx" `
+            --results-directory ${{ env.DOTNET_ROOT }}/TestResults || true
+
+      - name: Upload Test Results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: "Backend API tests"
+          path: ${{ env.DOTNET_ROOT }}/TestResults/test-results.trx
+          reporter: dotnet-trx
+
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: read #This is required for actions/checkout
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+      - name: dotnet publish
+        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
+  deploy:
+    if: github.event_name == 'push'
+    runs-on: windows-latest
+    needs: build
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B9ACA68F61D54C9EBF70AA2A6AF86091 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_A79483572DCF4AF1B36DBBADEC84BC5B }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_2C083BA4E7EF4744AE89C4C4D1E7D943 }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'papispowerpracticeapi'
+          slot-name: 'Production'
+          package: .
