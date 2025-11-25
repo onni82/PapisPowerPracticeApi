@@ -81,8 +81,13 @@ namespace PapisPowerPracticeApi
             }
             using (var scope = app.Services.CreateScope())
             {
+                // Seed Roles
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 await DbInitializer.SeedRolesAsync(roleManager);
+
+                // Seed Users
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                await DbInitializer.SeedUsersAsync(userManager);
             }
             app.UseHttpsRedirection();
             app.UseAuthentication();
