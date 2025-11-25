@@ -42,6 +42,32 @@ namespace PapisPowerPracticeApi.Services
             }).ToList();
             return getWorkoutLogDTO;
         }
+        
+        public async Task<List<GetWorkoutLogDTO>> GetWorkoutLogByUserAsync(string UserId)
+        { 
+            var workoutLog = await _workoutLogRepository.GetWorkoutLogByUserAsync(UserId);
+
+            var getWorkoutLogDTO = workoutLog.Select(w => new GetWorkoutLogDTO
+            {
+                Id = w.Id,
+                StartTime = w.StartTime,
+                EndTime = w.EndTime,
+                Notes = w.Notes,
+                Exercises = w.Exercises.Select(e => new WorkoutExerciseDTO
+                {
+                    Id = e.Id,
+                    ExerciseId = e.ExerciseId,
+                    Name = e.Exercise.Name,
+                    Sets = e.Sets.Select(s => new WorkoutSetDTO
+                    {
+                        Reps = s.Reps,
+                        Weight = s.Weight,
+                        IsWarmup = s.IsWarmup
+                    }).ToList()
+                }).ToList()
+            }).ToList();
+            return getWorkoutLogDTO;
+        }
         public async Task<GetWorkoutLogDTO> GetWorkoutLogByIdAsync(int workoutLogid)
         {
             var workoutLog = await _workoutLogRepository.GetWorkoutLogByIdAsync(workoutLogid);
