@@ -61,7 +61,7 @@ namespace PapisPowerPracticeApi
             builder.Services.AddScoped<IWorkoutLogRepository, WorkoutLogRepository>();
             builder.Services.AddScoped<IWorkoutLogService, WorkoutLogService>();
 
-            // OpenAI-klient
+            // OpenAI client
             builder.Services.AddHttpClient("OpenAI", client =>
             {
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {builder.Configuration["OpenAI:ApiKey"]}");
@@ -87,7 +87,6 @@ namespace PapisPowerPracticeApi
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 
