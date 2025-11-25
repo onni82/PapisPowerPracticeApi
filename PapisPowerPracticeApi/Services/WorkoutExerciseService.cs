@@ -54,9 +54,11 @@ namespace PapisPowerPracticeApi.Services
             
         //}
 
-        public Task<bool> DeleteWorkoutExerciseAsync(int id)
+        public async Task<bool> DeleteWorkoutExerciseAsync(int id)
         {
-            var deleteWorkout = _exerciseRepository.DeleteWorkoutExerciseAsync(id);
+            var deleteWorkout = await _exerciseRepository.DeleteWorkoutExerciseAsync(id);
+
+            
             return deleteWorkout;
         }
 

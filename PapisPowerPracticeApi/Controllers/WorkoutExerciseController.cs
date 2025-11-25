@@ -19,7 +19,7 @@ namespace PapisPowerPracticeApi.Controllers
             _workoutService = workoutService;
         }
         //[HttpPost]
-        //public async Task<ActionResult> CreateWorkoutExercise([FromBody]CreateWorkoutExerciseDTO exerciseDTO)
+        //public async Task<IActionResult> CreateWorkoutExercise(CreateWorkoutExerciseDTO exerciseDTO)
         //{
         //    var workout = await _workoutService.CreateWorkoutExerciseAsync(exerciseDTO);
         //    return Ok(workout);
@@ -28,14 +28,22 @@ namespace PapisPowerPracticeApi.Controllers
         public async Task<ActionResult<WorkoutExerciseDTO>> GetWorkoutExerciseById(int id)
         {
             var workout = await _workoutService.GetWorkoutExerciseByIdAsync(id);
+            if(workout == null)
+            {
+                return NotFound();
+            }
             return Ok(workout);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<WorkoutExerciseDTO>> DeleteWorkoutExercise(int id)
+        public async Task<IActionResult> DeleteWorkoutExercise(int id)
         {
             var workout = await _workoutService.DeleteWorkoutExerciseAsync(id);
-            return Ok(workout);
+            if (!workout)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
     }
 }
