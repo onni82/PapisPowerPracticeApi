@@ -43,6 +43,17 @@ namespace PapisPowerPracticeApi.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<WorkoutLog>> GetWorkoutLogByUserAsync(string UserId)
+        {
+            return await _dbContext.WorkoutLogs
+                .Where(w => w.UserId == UserId)
+                .Include(w => w.Exercises)
+                .ThenInclude(e => e.Sets)
+                .Include(e => e.Exercises)
+                .ThenInclude(e => e.Exercise)
+                .ToListAsync();
+        }
+
         public async Task<WorkoutLog> GetWorkoutLogByIdAsync(int id)
         {
             return await _dbContext.WorkoutLogs

@@ -24,6 +24,19 @@ namespace PapisPowerPracticeApi.Controllers
             var workoutLog = await _workoutLogService.GetAllWorkoutLogsAsync();
             return Ok(workoutLog);
         }
+        [HttpGet("WorkoutlogForUser")]
+        [Authorize]
+        
+        public async Task<ActionResult<List<GetWorkoutLogDTO>>> GetWorkoutLogByUserAsycn()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if(userId == null)
+            {
+                return Unauthorized();
+            }
+            var workoutLog = await _workoutLogService.GetWorkoutLogByUserAsync(userId);
+            return Ok(workoutLog);
+        }
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> CreateWorkoutLog(CreateWorkoutLogDTO workoutLogDTO)
