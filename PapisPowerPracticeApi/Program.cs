@@ -61,7 +61,7 @@ namespace PapisPowerPracticeApi
             builder.Services.AddScoped<IWorkoutLogRepository, WorkoutLogRepository>();
             builder.Services.AddScoped<IWorkoutLogService, WorkoutLogService>();
 
-            // OpenAI-klient
+            // OpenAI client
             builder.Services.AddHttpClient("OpenAI", client =>
             {
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {builder.Configuration["OpenAI:ApiKey"]}");
@@ -81,13 +81,17 @@ namespace PapisPowerPracticeApi
             }
             using (var scope = app.Services.CreateScope())
             {
+                // Seed Roles
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 await DbInitializer.SeedRolesAsync(roleManager);
+
+                // Seed Users
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                await DbInitializer.SeedUsersAsync(userManager);
             }
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

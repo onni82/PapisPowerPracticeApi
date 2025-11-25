@@ -1,0 +1,44 @@
+name : Tests CI/CD
+
+permissions:
+  contents: read
+  checks: write
+
+on:
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'PapisPowerPracticeApi/**'
+      - 'PapisPowerPracticeApi.Tests/**'
+
+jobs:
+  test:
+    if: github.event_name == 'pull_request'
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore PapisPowerPracticeApi.sln
+
+      - name: Build
+        run: dotnet build PapisPowerPracticeApi.sln --no-restore --configuration Release
+
+      - name: Run Tests
+        run: | 
+            dotnet test PapisPowerPracticeApi.Tests/PapisPowerPracticeApi.Tests.csproj `
+            --no-build `
+            --configuration Release `
+            --logger "trx;LogFileName=test-results.trx" `
+            --results-directory ${{ env.DOTNET_ROOT }}/TestResults || true
+
+      - name: Upload Test Results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: "Backend API tests"
+          path: ${{ env.DOTNET_ROOT }}/TestResults/test-results.trx
+          reporter: dotnet-trx
